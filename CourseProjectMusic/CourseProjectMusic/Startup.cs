@@ -43,10 +43,13 @@ namespace CourseProjectMusic
                 x.RequireHttpsMetadata = false;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:57091/",
+                    ValidateAudience = true,
+                    ValidAudience = "http://localhost:57091/",
                     IssuerSigningKey = authoptions.GetSymmetricSecurityKey(),
-                    ValidateIssuer = false,
-                    ValidateActor = false
+                    ValidateIssuerSigningKey=true,
+                    ValidateLifetime=true
                 };
             });
             // In production, the Angular files will be served from this directory

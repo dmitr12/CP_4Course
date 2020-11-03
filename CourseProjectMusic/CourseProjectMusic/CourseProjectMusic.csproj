@@ -29,7 +29,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\app-injection-tokens.ts" />
+    <None Remove="ClientApp\src\app\models\token.ts" />
     <None Remove="Utils\AuthOptions.cs~RFf485a.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\app-injection-tokens.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\token.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\services\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

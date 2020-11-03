@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using CourseProjectMusic.Models;
 using CourseProjectMusic.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -19,6 +20,7 @@ namespace CourseProjectMusic.Controllers
     {
         private DataBaseContext db;
         private readonly IOptions<AuthOptions> authOptions;
+        private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
         public AuthUserController(DataBaseContext db, IOptions<AuthOptions> authOptions)
         {
             this.db = db;
@@ -61,7 +63,7 @@ namespace CourseProjectMusic.Controllers
             //    claims.Add(new Claim("role", role.ToString()));
             //}
 
-            var token = new JwtSecurityToken(/*authParams.Issuer, authParams.Audience,*/ claims: claims, expires: DateTime.Now.AddSeconds(authParams.TokenLifeTime),
+            var token = new JwtSecurityToken("http://localhost:57091/", "http://localhost:57091/", claims: claims, notBefore:DateTime.Now, expires: DateTime.Now.AddSeconds(authParams.TokenLifeTime),
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
