@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\4Course\\CourseProject\\Server\\Server\\Server.csproj": {}
+    "D:\\4Course\\git\\CP_4Course\\CourseProject\\Server\\Server\\Server.csproj": {}
   },
   "projects": {
-    "D:\\4Course\\CourseProject\\Server\\Server\\Server.csproj": {
+    "D:\\4Course\\git\\CP_4Course\\CourseProject\\Server\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\4Course\\CourseProject\\Server\\Server\\Server.csproj",
+        "projectUniqueName": "D:\\4Course\\git\\CP_4Course\\CourseProject\\Server\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "D:\\4Course\\CourseProject\\Server\\Server\\Server.csproj",
+        "projectPath": "D:\\4Course\\git\\CP_4Course\\CourseProject\\Server\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\4Course\\CourseProject\\Server\\Server\\obj\\",
+        "outputPath": "D:\\4Course\\git\\CP_4Course\\CourseProject\\Server\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

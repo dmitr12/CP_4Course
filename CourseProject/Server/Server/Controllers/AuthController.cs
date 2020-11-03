@@ -27,12 +27,6 @@ namespace Server.Controllers
             this.authOptions = authOptions;
         }
 
-        [Authorize]
-        public string Get()
-        {
-            return "asd";
-        }
-
         [HttpPost("Login")]
         public IActionResult Login([FromBody]AuthModel model)
         {
