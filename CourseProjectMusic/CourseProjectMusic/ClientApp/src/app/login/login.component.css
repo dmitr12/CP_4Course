@@ -1,0 +1,16 @@
+button, button:focus {
+  background-color: #9608fc;
+}
+
+  button:hover {
+    background-color: #a708fc;
+  }
+
+.input-field input:focus + label {
+  color: #9608fc !important;
+}
+
+.input-field input:focus {
+  border-bottom: 1px solid #9608fc !important;
+  box-shadow: 0 1px 0 0 #9608fc !important
+}

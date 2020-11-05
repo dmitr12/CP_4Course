@@ -17,9 +17,5 @@ namespace CourseProjectMusic.Models
         [Required]
         [StringLength(30, MinimumLength = 6)]
         public string Password { get; set; }
-
-        [Required]
-        [Compare("Password", ErrorMessage = "Не удалось подтвердить пароль")]
-        public string ConfirmPassword { get; set; }
     }
 }

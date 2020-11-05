@@ -19,8 +19,8 @@ export class AuthService {
     private jwjtHelper: JwtHelperService,
     private router: Router) { }
 
-  login(username: string, password: string): Observable<Token> {
-    return this.httpClient.post<Token>(`${this.apiUrl}api/authuser/login`, { username, password }).pipe(tap(
+  login(email: string, password: string): Observable<Token> {
+    return this.httpClient.post<Token>(`${this.apiUrl}api/authuser/login`, { email, password }).pipe(tap(
       token => {
         localStorage.setItem(ACCESS_TOKEN, token.access_token);
       }

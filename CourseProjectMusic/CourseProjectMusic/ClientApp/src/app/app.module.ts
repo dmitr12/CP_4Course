@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { JwtModule } from '@auth0/angular-jwt'
 import { API_URL } from './app-injection-tokens';
 import { environment } from '../environments/environment';
 import { ACCESS_TOKEN } from './services/auth.service';
+import { LoginComponent } from './login/login.component';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -24,12 +25,14 @@ export function tokenGetter() {
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter/*,*/
