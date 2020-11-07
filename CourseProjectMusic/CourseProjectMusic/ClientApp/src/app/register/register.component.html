@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <form class="card col-md-4" [formGroup]="form">
+    <div class="card-content">
+      <span class="card-title center-align">Регистрация пользователя</span>
+      <div class="input-field">
+        <input id="email" required type="email" formControlName="email">
+        <label for="email">Email:</label>
+      </div>
+      <div class="input-field">
+        <input id="login" required type="text" formControlName="login">
+        <label for="login">Логин:</label>
+      </div>
+      <div class="input-field">
+        <input id="password" required type="password" formControlName="password">
+        <label for="password">Пароль:</label>
+      </div>
+      <div class="input-field">
+        <input id="confirmpassword" required type="password" formControlName="confirmpassword" pattern="{{password.value}}">
+        <label for="confirmpassword">Подтверждение пароля:</label>
+      </div>
+    </div>
+    <div class="card-action center-align">
+      <button type="submit" class="btn waves-effect" [disabled]="form.invalid">Регистрация</button>
+    </div>
+  </form>
+</div>
+
+
+

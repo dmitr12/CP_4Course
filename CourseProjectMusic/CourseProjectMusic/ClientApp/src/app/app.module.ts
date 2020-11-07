@@ -14,6 +14,9 @@ import { API_URL } from './app-injection-tokens';
 import { environment } from '../environments/environment';
 import { ACCESS_TOKEN } from './services/auth.service';
 import { LoginComponent } from './login/login.component';
+import { AuthlayoutComponent } from './layouts/authlayout/authlayout.component';
+import { RegisterComponent } from './register/register.component';
+import { log } from 'util';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -26,7 +29,9 @@ export function tokenGetter() {
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    LoginComponent
+    LoginComponent,
+    AuthlayoutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -40,9 +45,17 @@ export function tokenGetter() {
       }
     }),
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      {
+        path: '', component: AuthlayoutComponent, children: [
+          { path: '', redirectTo: '/login', pathMatch: 'full' },
+          { path: 'login', component: LoginComponent },
+          { path: 'register', component: RegisterComponent }
+        ]
+      }
+      //{ path: '', component: HomeComponent, pathMatch: 'full' },
+      //{ path: 'counter', component: CounterComponent },
+      //{ path: 'fetch-data', component: FetchDataComponent },
+      //{ path: 'login', component: LoginComponent },
     ])
   ],
   providers: [{
