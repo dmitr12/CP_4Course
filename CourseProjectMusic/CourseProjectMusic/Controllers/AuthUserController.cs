@@ -63,7 +63,7 @@ namespace CourseProjectMusic.Controllers
             //    claims.Add(new Claim("role", role.ToString()));
             //}
 
-            var token = new JwtSecurityToken("http://localhost:57091/", "http://localhost:57091/", claims: claims, notBefore:DateTime.Now, expires: DateTime.Now.AddSeconds(authParams.TokenLifeTime),
+            var token = new JwtSecurityToken(issuer: authParams.Issuer, audience: authParams.Audience, claims: claims, notBefore:DateTime.Now, expires: DateTime.Now.AddSeconds(authParams.TokenLifeTime),
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

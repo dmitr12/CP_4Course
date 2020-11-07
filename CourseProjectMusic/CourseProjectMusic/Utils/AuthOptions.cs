@@ -9,6 +9,8 @@ namespace CourseProjectMusic.Utils
 {
     public class AuthOptions
     {
+        public string Issuer { get; set; }
+        public string Audience { get; set; }
         public string Secret { get; set; } // секретная строка для генерации токена
         public int TokenLifeTime { get; set; } // длительность жизни токена в секундах
         public SymmetricSecurityKey GetSymmetricSecurityKey() // метод генерации ключа

@@ -44,9 +44,9 @@ namespace CourseProjectMusic
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "http://localhost:57091/",
+                    ValidIssuer = authoptions.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = "http://localhost:57091/",
+                    ValidAudience = authoptions.Audience,
                     IssuerSigningKey = authoptions.GetSymmetricSecurityKey(),
                     ValidateIssuerSigningKey=true,
                     ValidateLifetime=true

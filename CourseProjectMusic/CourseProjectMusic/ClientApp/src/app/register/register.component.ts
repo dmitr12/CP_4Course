@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { RegisterService } from '../services/register.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,17 +12,34 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private rs: RegisterService, private router: Router) { }
 
   ngOnInit() {
-    //this.form = this.formBuilder.group({
-    //  email: ['ss'],
-    //  login: [''],
-    //  password: [''],
-    //  confirmpassword: ['']
-    //}, {
-    //    validator: MustMatch('password:', 'confirmpassword')
-    //});
+    this.form = new FormGroup({
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      login: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      passwords: new FormGroup({
+        psw: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+        confirmpsw: new FormControl(null, [Validators.required, Validators.minLength(6)])
+      }, this.passwordAreEqual())
+    });
   }
 
+  passwordAreEqual(): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      if (!(group.dirty || group.touched) || group.get('psw').value === group.get('confirmpsw').value) {
+        return null;
+      }
+      return { custom: 'Passwords are not equal' };
+    };
+  }
+
+  onSubmit() {
+    this.rs.register(this.form.value.email, this.form.value.login, this.form.value.passwords.psw).subscribe(res => {
+      alert('Пользователь успешно зарегистрирован');
+      this.router.navigate(["/login"]);
+    }, error => {
+      alert(error.response);
+    });
+  }
 }

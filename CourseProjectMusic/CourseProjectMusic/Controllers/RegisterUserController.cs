@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CourseProjectMusic.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseProjectMusic.Controllers
 {
@@ -24,10 +25,22 @@ namespace CourseProjectMusic.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                User user = new User { Login = model.Login, Mail = model.Mail, Password = model.Password };
-                db.Users.Add(user);
-                await db.SaveChangesAsync();
+                User us = await db.Users.Where(u => u.Mail == model.Mail).FirstOrDefaultAsync();
+                if (us != null)
+                    return BadRequest(new {msg= $"Пользователь с {model.Mail} уже зарегистрирован" });
+                us= await db.Users.Where(u => u.Login == model.Login).FirstOrDefaultAsync();
+                if(us!=null)
+                    return BadRequest(new { msg = $"Пользователь с {model.Login} уже зарегистрирован" });
+                User user = new User { Mail = model.Mail, Login = model.Login, Password = model.Password };
+                try
+                {
+                    db.Users.Add(user);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.InnerException.Message);
+                }
                 return Ok(user);
             }
             return BadRequest();
