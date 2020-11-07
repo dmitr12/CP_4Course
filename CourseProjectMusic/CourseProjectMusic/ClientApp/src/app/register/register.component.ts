@@ -36,10 +36,12 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.rs.register(this.form.value.email, this.form.value.login, this.form.value.passwords.psw).subscribe(res => {
-      alert('Пользователь успешно зарегистрирован');
-      this.router.navigate(["/login"]);
+      if (res['msg']!='')
+        alert(res['msg'])
+      else
+        this.router.navigate(["/login"]);
     }, error => {
-      alert(error.response);
+      alert("При отправке запроса возникла ошибка, статусный код "+error.status);
     });
   }
 }

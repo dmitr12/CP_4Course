@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CourseProjectMusic.Models;
+using CourseProjectMusic.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,17 +22,17 @@ namespace CourseProjectMusic.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Register(RegisterModel model)
+        public async Task<ActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
                 User us = await db.Users.Where(u => u.Mail == model.Mail).FirstOrDefaultAsync();
                 if (us != null)
-                    return BadRequest(new {msg= $"Пользователь с {model.Mail} уже зарегистрирован" });
+                    return Ok(new { msg = $"Пользователь с {model.Mail} уже зарегистрирован" });  
                 us= await db.Users.Where(u => u.Login == model.Login).FirstOrDefaultAsync();
                 if(us!=null)
-                    return BadRequest(new { msg = $"Пользователь с {model.Login} уже зарегистрирован" });
-                User user = new User { Mail = model.Mail, Login = model.Login, Password = model.Password };
+                    return Ok(new { msg = $"Пользователь с {model.Login} уже зарегистрирован" });
+                User user = new User { Mail = model.Mail, Login = model.Login, Password = HashClass.GetHash(model.Password)};
                 try
                 {
                     db.Users.Add(user);
@@ -41,7 +42,7 @@ namespace CourseProjectMusic.Controllers
                 {
                     return BadRequest(ex.InnerException.Message);
                 }
-                return Ok(user);
+                return Ok(new {msg=""});
             }
             return BadRequest();
         }

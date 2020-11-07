@@ -27,7 +27,10 @@ export class LoginComponent implements OnInit {
     this.as.login(this.form.value.email, this.form.value.password).subscribe(res => {
       alert("auth:ok!");
     }, error => {
-        alert('неверный логин или пароль');
+        if (error.status == 401)
+          alert("Неверный логин или пароль");
+        else
+          alert("Возникла ошибка, статусный код "+error.status)
     });
   }
 

@@ -42,7 +42,7 @@ namespace CourseProjectMusic.Controllers
 
         private User AuthenticateUser(AuthModel model)
         {
-            User user = db.Users.Where(u => u.Mail == model.Email && u.Password == model.Password).FirstOrDefault();
+            User user = db.Users.Where(u => u.Mail == model.Email && u.Password == HashClass.GetHash(model.Password)).FirstOrDefault();
             return user;
         }
 
