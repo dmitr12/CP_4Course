@@ -17,6 +17,9 @@ import { LoginComponent } from './login/login.component';
 import { AuthlayoutComponent } from './layouts/authlayout/authlayout.component';
 import { RegisterComponent } from './register/register.component';
 import { log } from 'util';
+import { AudioplayerComponent } from './audioplayer/audioplayer.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -31,13 +34,15 @@ export function tokenGetter() {
     FetchDataComponent,
     LoginComponent,
     AuthlayoutComponent,
-    RegisterComponent
+    RegisterComponent,
+    AudioplayerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatIconModule,
     JwtModule.forRoot({
       config: {
         tokenGetter/*,*/
@@ -56,7 +61,8 @@ export function tokenGetter() {
       //{ path: 'counter', component: CounterComponent },
       //{ path: 'fetch-data', component: FetchDataComponent },
       //{ path: 'login', component: LoginComponent },
-    ])
+    ]),
+    BrowserAnimationsModule
   ],
   providers: [{
     provide: API_URL,
