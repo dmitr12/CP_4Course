@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
     return this.as.isAuth();
   }
 
-  constructor(private as: AuthService) { }
+  constructor(private as: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.as.login(this.form.value.email, this.form.value.password).subscribe(res => {
-      alert("auth:ok!");
+      this.router.navigate(['/app']);
     }, error => {
         if (error.status == 401)
           alert("Неверный логин или пароль");

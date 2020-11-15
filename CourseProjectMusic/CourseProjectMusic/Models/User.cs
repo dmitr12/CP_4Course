@@ -22,7 +22,7 @@ namespace CourseProjectMusic.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
 
         [StringLength(100, MinimumLength = 3)]
         public string Name { get; set; }

@@ -1,0 +1,17 @@
+<!--<ul class="sidenav sidenav-fixed a-sidenav">
+  <h4>Music App</h4>
+  <li class="bold" routerLinkActive="active"><a routerLink="playlist" class="waves-effect waves-purple">Моя музыка</a></li>
+</ul>
+<router-outlet></router-outlet>-->
+
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav mode="side" class="sidenav sidenav-fixed" opened>
+      <ul>
+        <h4>Music App</h4>
+        <li routerLinkActive="active" class="bold"><a routerLink="playlist" class="waves-effect waves-purple">Моя музыка</a></li>
+      </ul>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

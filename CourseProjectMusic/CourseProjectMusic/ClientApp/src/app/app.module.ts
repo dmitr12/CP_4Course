@@ -20,6 +20,10 @@ import { log } from 'util';
 import { AudioplayerComponent } from './audioplayer/audioplayer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthGuard } from './guards/auth-guard';
+import { ApplayoutComponent } from './layouts/applayout/applayout.component';
+import { PlaylistComponent } from './playlist/playlist.component';
+import { MatSidenavModule } from '@angular/material';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -35,13 +39,16 @@ export function tokenGetter() {
     LoginComponent,
     AuthlayoutComponent,
     RegisterComponent,
-    AudioplayerComponent
+    AudioplayerComponent,
+    ApplayoutComponent,
+    PlaylistComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSidenavModule,
     MatIconModule,
     JwtModule.forRoot({
       config: {
@@ -55,6 +62,12 @@ export function tokenGetter() {
           { path: '', redirectTo: '/login', pathMatch: 'full' },
           { path: 'login', component: LoginComponent },
           { path: 'register', component: RegisterComponent }
+        ]
+      },
+      {
+        path: 'app', component: ApplayoutComponent, canActivate: [AuthGuard], children: [
+          { path: '', redirectTo: 'playlist', pathMatch: 'full'},
+          { path: 'playlist', component: PlaylistComponent }
         ]
       }
       //{ path: '', component: HomeComponent, pathMatch: 'full' },
