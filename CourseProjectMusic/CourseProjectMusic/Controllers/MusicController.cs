@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CourseProjectMusic.Models;
 using CourseProjectMusic.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace CourseProjectMusic.Controllers
         private readonly DataBaseContext db;
         private readonly IConfiguration config;
         private readonly IOptions<StorageConfiguration> storageConfig;
+        private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
+
         public MusicController(DataBaseContext db, IConfiguration config, IOptions<StorageConfiguration> sc)
         {
             this.db = db;
@@ -36,25 +40,37 @@ namespace CourseProjectMusic.Controllers
             return res;
         }
 
-        [HttpPost("AddMusic")]
-        public async Task<bool> AddMusic(IFormFile asset)
+        [HttpGet]
+        [Authorize]
+        public IActionResult S()
         {
-            try
-            {
-                if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
-                {
-                    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-                    CloudBlobContainer container = blobClient.GetContainerReference("SomeUserName_"+storageConfig.Value.ContainerName);
-                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(asset.FileName);
-                    await blockBlob.UploadFromStreamAsync(asset.OpenReadStream());
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            User user = db.Users.Find(UserId);
+            return Ok(new { user.Mail});
+        }
+
+        [HttpPost("AddMusic")]
+        [Authorize]
+        public async Task<string> AddMusic(/*IFormFile asset*/)
+        {
+            User user = await db.Users.FindAsync(UserId);
+            return user.Mail;
+           
+            //try
+            //{
+            //    if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
+            //    {
+            //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            //        CloudBlobContainer container = blobClient.GetContainerReference("SomeUserName_"+storageConfig.Value.ContainerName);
+            //        CloudBlockBlob blockBlob = container.GetBlockBlobReference(asset.FileName);
+            //        await blockBlob.UploadFromStreamAsync(asset.OpenReadStream());
+            //        return true;
+            //    }
+            //    return false;
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
         }
     }
 }

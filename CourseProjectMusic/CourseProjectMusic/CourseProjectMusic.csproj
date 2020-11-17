@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\app-injection-tokens.ts" />
+    <None Remove="ClientApp\src\app\app.component.html~RF2d16270.TMP" />
     <None Remove="ClientApp\src\app\guards\auth-guard.ts" />
     <None Remove="ClientApp\src\app\models\music_info.ts" />
     <None Remove="ClientApp\src\app\models\token.ts" />

@@ -9,6 +9,7 @@ using CourseProjectMusic.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,7 +21,6 @@ namespace CourseProjectMusic.Controllers
     {
         private DataBaseContext db;
         private readonly IOptions<AuthOptions> authOptions;
-        //private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
         public AuthUserController(DataBaseContext db, IOptions<AuthOptions> authOptions)
         {
             this.db = db;
@@ -28,9 +28,9 @@ namespace CourseProjectMusic.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] AuthModel model)
+        public async Task<IActionResult> Login([FromBody] AuthModel model)
         {
-            var user = AuthenticateUser(model);
+            User user = await db.Users.Where(u => u.Mail == model.Email && u.Password == HashClass.GetHash(model.Password)).FirstOrDefaultAsync();
             if (user != null)
             {
                 //Generate token
@@ -38,12 +38,6 @@ namespace CourseProjectMusic.Controllers
                 return Ok(new { access_token = token });
             }
             return Unauthorized();
-        }
-
-        private User AuthenticateUser(AuthModel model)
-        {
-            User user = db.Users.Where(u => u.Mail == model.Email && u.Password == HashClass.GetHash(model.Password)).FirstOrDefault();
-            return user;
         }
 
         private string GenerateJWT(User user)
