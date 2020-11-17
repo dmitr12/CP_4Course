@@ -53,7 +53,10 @@ export class AudioService {
     this.audioObj.pause();
   }
 
-  mouseUp() {
+  mouseUp(ev) {
+    var value = ev.target.value;
+    var parsed = parseFloat(value);
+    this.audioObj.currentTime = parsed;
     this.audioObj.play();
     this.updateProgress();
   }

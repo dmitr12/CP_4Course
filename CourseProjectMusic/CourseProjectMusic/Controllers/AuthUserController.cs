@@ -20,7 +20,7 @@ namespace CourseProjectMusic.Controllers
     {
         private DataBaseContext db;
         private readonly IOptions<AuthOptions> authOptions;
-        private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
+        //private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
         public AuthUserController(DataBaseContext db, IOptions<AuthOptions> authOptions)
         {
             this.db = db;

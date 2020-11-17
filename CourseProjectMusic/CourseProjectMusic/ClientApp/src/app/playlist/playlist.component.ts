@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { API_URL } from '../app-injection-tokens';
+import { MusicInfo } from '../models/music_info';
 
 @Component({
   selector: 'app-playlist',
@@ -7,20 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlaylistComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http: HttpClient, @Inject(API_URL) private apiUrl: string,) { }
 
   ngOnInit() {
+    this.http.get<MusicInfo[]>(`${this.apiUrl}api/music/list/` + '1').subscribe(result => {
+      this.files = result;
+    }, error => {
+        alert(error)
+    })
   }
 
-  files = [{
-    url: 'https://music1storage.blob.core.windows.net/music/4.mp3',
-    name: '4.mp3'
-  }, {
-    url: 'https://music1storage.blob.core.windows.net/music/3.mp3',
-    name: '3.mp3'
-  }, {
-    url: 'https://music1storage.blob.core.windows.net/music/1.mp3',
-    name: '1.mp3'
-  }];
+  files: MusicInfo[] = [];
 
 }

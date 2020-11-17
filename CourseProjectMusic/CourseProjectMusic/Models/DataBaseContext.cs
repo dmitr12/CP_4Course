@@ -9,6 +9,8 @@ namespace CourseProjectMusic.Models
     public class DataBaseContext:DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<MusicGenre> MusicGenres { get; set; }
+        public DbSet<Music> Musics { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
     }

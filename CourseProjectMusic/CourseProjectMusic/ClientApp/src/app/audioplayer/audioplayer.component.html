@@ -19,7 +19,7 @@
           {{audioService.currentTime}}
         </div>
         <div class="col-md-10">
-          <input type="range" min="0" max="{{audioService.audioObj.duration}}" [(ngModel)]="audioService.audioObj.currentTime" (mousedown)="audioService.mouseDown()" (mouseup)="audioService.mouseUp()">
+          <input type="range" min="0" max="{{audioService.audioObj.duration}}" [value]="audioService.audioObj.currentTime" (mousedown)="audioService.mouseDown()" (mouseup)="audioService.mouseUp($event)">
         </div>
         <div class="col">
           {{audioService.duration}}

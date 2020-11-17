@@ -33,6 +33,7 @@ namespace CourseProjectMusic
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+            services.Configure<StorageConfiguration>(Configuration.GetSection("StorageConfiguration"));
             var authoptions = Configuration.GetSection("Auth").Get<AuthOptions>();
             services.AddDbContext<DataBaseContext>(options =>
             {
