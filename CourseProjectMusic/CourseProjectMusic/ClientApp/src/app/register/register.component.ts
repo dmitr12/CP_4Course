@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
       if (res['msg']!='')
         alert(res['msg'])
       else
-        this.router.navigate(["/login"]);
+        this.router.navigate(['']);
     }, error => {
       alert("При отправке запроса возникла ошибка, статусный код "+error.status);
     });

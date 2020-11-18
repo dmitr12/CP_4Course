@@ -23,7 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthGuard } from './guards/auth-guard';
 import { ApplayoutComponent } from './layouts/applayout/applayout.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { MatSidenavModule } from '@angular/material';
+import { MatSidenavModule, MatSelectModule} from '@angular/material';
+import { AddmusicComponent } from './addmusic/addmusic.component';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -41,7 +42,8 @@ export function tokenGetter() {
     RegisterComponent,
     AudioplayerComponent,
     ApplayoutComponent,
-    PlaylistComponent
+    PlaylistComponent,
+    AddmusicComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,6 +52,7 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatSidenavModule,
     MatIconModule,
+    MatSelectModule,
     JwtModule.forRoot({
       config: {
         tokenGetter/*,*/
@@ -58,16 +61,17 @@ export function tokenGetter() {
     }),
     RouterModule.forRoot([
       {
-        path: '', component: AuthlayoutComponent, children: [
+        path: 'auth', component: AuthlayoutComponent, children: [
           { path: '', redirectTo: '/login', pathMatch: 'full' },
           { path: 'login', component: LoginComponent },
           { path: 'register', component: RegisterComponent }
         ]
       },
       {
-        path: 'app', component: ApplayoutComponent, canActivate: [AuthGuard], children: [
+        path: '', component: ApplayoutComponent, canActivate: [AuthGuard], children: [
           { path: '', redirectTo: 'playlist', pathMatch: 'full'},
-          { path: 'playlist', component: PlaylistComponent }
+          { path: 'playlist', component: PlaylistComponent },
+          { path: 'addmusic', component: AddmusicComponent }
         ]
       }
       //{ path: '', component: HomeComponent, pathMatch: 'full' },

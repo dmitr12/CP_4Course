@@ -40,29 +40,28 @@ namespace CourseProjectMusic.Controllers
             return res;
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult S()
+        [HttpGet("listMusicGenres")]
+        public async Task<List<MusicGenreInfo>> GetMusicGenresList()
         {
-            User user = db.Users.Find(UserId);
-            return Ok(new { user.Mail});
+            List<MusicGenreInfo> res = new List<MusicGenreInfo>();
+            await db.MusicGenres.ForEachAsync(g => res.Add(new MusicGenreInfo { Id = g.MusicGenreId, Name = g.GenreName, Description = g.GenreDescription }));
+            return res;
         }
 
         [HttpPost("AddMusic")]
         [Authorize]
-        public async Task<string> AddMusic(/*IFormFile asset*/)
+        public async Task</*bool*/IActionResult> AddMusic([FromForm]IFormFile asset,[FromQuery] string musicName, [FromQuery] int musicGenreId)
         {
             User user = await db.Users.FindAsync(UserId);
-            return user.Mail;
-           
+            return Ok(new {name=asset.Name+"+"+musicName+"+"+musicGenreId+"+"+UserId});
             //try
             //{
             //    if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
             //    {
             //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            //        CloudBlobContainer container = blobClient.GetContainerReference("SomeUserName_"+storageConfig.Value.ContainerName);
-            //        CloudBlockBlob blockBlob = container.GetBlockBlobReference(asset.FileName);
-            //        await blockBlob.UploadFromStreamAsync(asset.OpenReadStream());
+            //        CloudBlobContainer container = blobClient.GetContainerReference($"{user.Login}_" + storageConfig.Value.ContainerName);
+            //        CloudBlockBlob blockBlob = container.GetBlockBlobReference(model.asset.FileName);
+            //        await blockBlob.UploadFromStreamAsync(model.asset.OpenReadStream());
             //        return true;
             //    }
             //    return false;

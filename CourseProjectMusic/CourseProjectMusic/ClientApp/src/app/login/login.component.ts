@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.as.login(this.form.value.email, this.form.value.password).subscribe(res => {
-      this.router.navigate(['/app']);
+      this.router.navigate(['']);
     }, error => {
         if (error.status == 401)
           alert("Неверный логин или пароль");
