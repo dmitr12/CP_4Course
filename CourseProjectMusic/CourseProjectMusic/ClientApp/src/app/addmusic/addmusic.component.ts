@@ -4,6 +4,7 @@ import { MusicService } from '../services/music.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '../app-injection-tokens';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addmusic',
@@ -13,20 +14,21 @@ import { API_URL } from '../app-injection-tokens';
 export class AddmusicComponent implements OnInit {
 
   musicGenres: MusicGenreInfo[] = [];
-  musicToUpload: FormData;
   form: FormGroup;
 
   files: string[] = [];
-  fileToUpload: FormData;
+  formData: FormData;
 
-  constructor(private musicService: MusicService, private http: HttpClient, @Inject(API_URL) private apiUrl: string) { }
+  constructor(private musicService: MusicService, private http: HttpClient, @Inject(API_URL) private apiUrl: string,
+    private router: Router) { }
 
   ngOnInit() {
+    this.formData = new FormData();
 
     this.form = new FormGroup({
       musicName: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       musicFileName: new FormControl(null, [Validators.required]),
-      //musicImageName: new FormControl(null),
+      musicImageName: new FormControl(null),
       musicGenreId: new FormControl(null, [Validators.required])
     })
 
@@ -37,48 +39,46 @@ export class AddmusicComponent implements OnInit {
     });
   }
 
-  changeFile(files: any) {
-    let formData: FormData = new FormData();
-    formData.append("asset", files[0], files[0].name);
-    this.fileToUpload = formData;
-    //this.onUploadFiles();
+  changeImageFile(files: any) {
+    this.formData.delete("MusicImageFile");
+    this.formData.append("MusicImageFile", files[0], files[0].name);
+  }
+
+  changeMusicFile(files: any) {
+    this.formData.delete("MusicFile");
+    this.formData.append("MusicFile", files[0], files[0].name);
   }
 
   add() {
     let fileImageName;
-    let arrMusic = this.form.value.musicFileName.split('\\');
-    let fileMusicName = arrMusic[arrMusic.length - 1];
-    //if (this.form.value.musicImageName===null)
-    //  fileImageName = '';
-    //else {
-    //  let arrImage = this.form.value.musicImageName.split('\\');
-    //  fileImageName = arrImage[arrImage.length - 1];
-    //}
-    let musicFormat = fileMusicName.substring(fileMusicName.indexOf('.') + 1, fileMusicName.length)
-    if (musicFormat != 'mp3') {
+    let fileMusicName = this.musicService.getFileNameByPath(this.form.value.musicFileName);
+    if (this.form.value.musicImageName===null)
+      fileImageName = '';
+    else
+      fileImageName = this.musicService.getFileNameByPath(this.form.value.musicImageName)
+    if (!this.musicService.checkFileFormat(fileMusicName, "mp3")) {
       alert('Выбран неверный формат аудозаписи')
       return;
     }
-    //if (fileImageName) {
-    //  let imageFormat = fileImageName.substring(fileImageName.indexOf('.') + 1, fileImageName.length)
-    //  if (imageFormat != 'png' && imageFormat!='jpg') {
-    //    alert('Выбран неверный формат изображения')
-    //    return;
-    //  }
-    //}
-    return this.http.post(`${this.apiUrl}api/music/AddMusic?musicName=` + this.form.value.musicName + '&musicGenreId=' + this.form.value.musicGenreId, this.fileToUpload)
-      .subscribe((response: any) => {
-        //this.fileUpoadInitiated = false;
-        //this.fileUpload = '';
-        //if (response == true) {
-        //  this.showBlobs();
-        //}
-        //else {
-        //  alert('Error occured!');
-        //  this.fileUpoadInitiated = false;
-          alert(response['name'])
+    if (fileImageName) {
+      if (!this.musicService.checkFileFormat(fileImageName, 'png') && !this.musicService.checkFileFormat(fileImageName, 'jpg')) {
+        alert('Выбран неверный формат изображения')
+        return;
+      }
+    }
+    this.formData.delete("MusicGenreId");
+    this.formData.delete("MusicName");
+    this.formData.append("MusicGenreId", this.form.value.musicGenreId);
+    this.formData.append("MusicName", this.form.value.musicName);
+    this.musicService.addmusic(this.formData).subscribe((response: any) => {
+        if (response['msg'] == '') {
+          alert('Запись успешно добавлена');
+          this.router.navigate(['']);
+        }
+        else
+          alert(response['msg']);
         },
-          err => console.log(err),
+          err => alert('Статусный код '+err.status),
       );
   }
 

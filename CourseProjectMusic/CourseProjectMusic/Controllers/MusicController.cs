@@ -24,7 +24,6 @@ namespace CourseProjectMusic.Controllers
         private readonly IConfiguration config;
         private readonly IOptions<StorageConfiguration> storageConfig;
         private int UserId => int.Parse(User.Claims.Single(cl => cl.Type == ClaimTypes.NameIdentifier).Value);
-
         public MusicController(DataBaseContext db, IConfiguration config, IOptions<StorageConfiguration> sc)
         {
             this.db = db;
@@ -50,26 +49,43 @@ namespace CourseProjectMusic.Controllers
 
         [HttpPost("AddMusic")]
         [Authorize]
-        public async Task</*bool*/IActionResult> AddMusic([FromForm]IFormFile asset,[FromQuery] string musicName, [FromQuery] int musicGenreId)
+        public async Task<IActionResult> AddMusic([FromForm]AddMusicModel model)
         {
             User user = await db.Users.FindAsync(UserId);
-            return Ok(new {name=asset.Name+"+"+musicName+"+"+musicGenreId+"+"+UserId});
-            //try
-            //{
-            //    if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
-            //    {
-            //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            //        CloudBlobContainer container = blobClient.GetContainerReference($"{user.Login}_" + storageConfig.Value.ContainerName);
-            //        CloudBlockBlob blockBlob = container.GetBlockBlobReference(model.asset.FileName);
-            //        await blockBlob.UploadFromStreamAsync(model.asset.OpenReadStream());
-            //        return true;
-            //    }
-            //    return false;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+            if (await db.Musics.Where(m => m.UserId == user.UserId && m.MusicName == model.MusicName).FirstOrDefaultAsync() != null)
+                return Ok(new { msg = $"У вас уже есть запись с названием {model.MusicName}" });
+            try
+            {
+                if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
+                {
+                    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                    CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.Value.ContainerName);
+                    CloudBlockBlob musicBlockBlob = container.GetBlockBlobReference($"{user.Login}_" + model.MusicFile.FileName);
+                    if (await musicBlockBlob.ExistsAsync())
+                        return Ok(new { msg = $"В вашем хранилище уже есть файл {model.MusicFile.FileName}" });
+                    CloudBlockBlob imageBlockBlob = container.GetBlockBlobReference($"{user.Login}_" + model.MusicImageFile.FileName);
+                    if (await imageBlockBlob.ExistsAsync())
+                        return Ok(new { msg = $"В вашем хранилище уже есть файл {model.MusicImageFile.FileName}" });
+                    await musicBlockBlob.UploadFromStreamAsync(model.MusicFile.OpenReadStream());
+                    await imageBlockBlob.UploadFromStreamAsync(model.MusicImageFile.OpenReadStream());
+                    db.Musics.Add(new Music
+                    {
+                        MusicName = model.MusicName,
+                        MusicFileName = $"{user.Login}_"+model.MusicFile.FileName,
+                        MusicImageName = $"{user.Login}_"+model.MusicImageFile.FileName,
+                        UserId = user.UserId,
+                        DateOfPublication = DateTime.Now.Date,
+                        MusicGenreId = model.MusicGenreId
+                    });
+                    await db.SaveChangesAsync();
+                    return Ok(new {msg=""});
+                }
+                return StatusCode(500);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

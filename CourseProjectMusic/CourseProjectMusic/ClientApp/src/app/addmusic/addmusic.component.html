@@ -11,14 +11,14 @@
         <div>
           <span>*Выберите файл записи (формат .mp3)</span>
         </div>
-        <input id="musicFileName" required type="file" accept=".mp3" formControlName="musicFileName" (change)="changeFile($event.target.files)">
+        <input id="musicFileName" required type="file" accept=".mp3" formControlName="musicFileName" (change)="changeMusicFile($event.target.files)">
       </div>
-      <!--<div class="input-field">
+      <div class="input-field">
         <div>
           <span>Выберите картинку для записи (формат .jpg, .png)</span>
         </div>
-        <input id="musicImageName" type="file" accept=".jpg, .png" formControlName="musicImageName">
-      </div>-->
+        <input id="musicImageName" type="file" accept=".jpg, .png" formControlName="musicImageName" (change)="changeImageFile($event.target.files)">
+      </div>
       <mat-form-field appearance="fill">
         <label>*Жанр музыки</label>
         <mat-select id="musicGenreId" formControlName="musicGenreId">
