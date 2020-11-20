@@ -4,6 +4,8 @@ import { API_URL } from '../app-injection-tokens';
 import { MusicInfo } from '../models/music_info';
 import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
+import jwt_decode from 'jwt-decode';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-playlist',
@@ -12,13 +14,13 @@ import { MusicService } from '../services/music.service';
 })
 export class PlaylistComponent implements OnInit {
 
-  constructor(private http: HttpClient, private musicService: MusicService, private router: Router) { }
+  constructor(private http: HttpClient, private musicService: MusicService, private router: Router,
+    private authService: AuthService) { }
 
   files: MusicInfo[] = [];
 
   ngOnInit() {
-    //Поменять статический id!!!
-    this.musicService.getListMusicByUserId(2).subscribe(result => {
+    this.musicService.getListMusicByUserId(jwt_decode(this.authService.getAccessToken())['sub']).subscribe(result => {
       this.files = result;
     }, error => {
         alert(error.message)

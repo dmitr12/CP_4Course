@@ -12,7 +12,10 @@
 <div class="row">
   <div class="col s12">
     <div class="collection" *ngFor="let file of files">
-      <a class="collection-item" (click)="player.openFile(file.name, file.url)">{{file.name}}</a>
+      <a class="collection-item" (click)="player.openFile(file.fileName, file.name)">{{file.name}}</a>
     </div>
   </div>
+</div>
+<div style="text-align:center" *ngIf="files.length==0">
+  У вас пока нет аудиозаписей
 </div>

@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import * as moment from 'moment';
+import { API_URL } from '../app-injection-tokens';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AudioService {
 
-  constructor() { }
+  constructor(@Inject(API_URL) private apiUrl: string) { }
 
   audioObj = new Audio();
 
@@ -15,12 +16,14 @@ export class AudioService {
   delay;
   isPlaying = false;
   audioName = "";
-  currentAudioUrl: string = null;
+  currentAudioFileName: string = null;
 
-  openFile(name, url) {
-    this.currentAudioUrl = url;
+  openFile(filename, name) {
+    this.currentAudioFileName = filename;
     this.audioName = name;
-    this.audioObj.src = url;
+    this.audioObj.src = `${this.apiUrl}api/music/DownloadFile/${filename}`;
+    this.audioObj.preload = "auto"
+
     this.audioObj.load();
     this.play();
     this.updateProgress();
@@ -28,13 +31,13 @@ export class AudioService {
 
   play() {
     this.audioObj.play();
-    if (this.currentAudioUrl)
+    if (this.currentAudioFileName)
       this.isPlaying = true;
   }
 
   pause() {
     this.audioObj.pause();
-    if (this.currentAudioUrl)
+    if (this.currentAudioFileName)
       this.isPlaying = false;
   }
 

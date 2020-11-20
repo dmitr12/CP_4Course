@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -31,11 +32,52 @@ namespace CourseProjectMusic.Controllers
             storageConfig = sc;
         }
 
+
+        [HttpGet("DownloadFile/{fileName}")]
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            MemoryStream ms = new MemoryStream();
+            if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
+            {
+                CloudBlobClient BlobClient = storageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = BlobClient.GetContainerReference(storageConfig.Value.ContainerName);
+
+                if (await container.ExistsAsync())
+                {
+                    CloudBlob file = container.GetBlobReference(fileName);
+
+                    if (await file.ExistsAsync())
+                    {
+                        await file.DownloadToStreamAsync(ms);
+                        Stream blobStream = file.OpenReadAsync().Result;
+
+                        Response.Headers.Add("Accept-Ranges", "bytes");
+
+                        return new FileStreamResult(blobStream, "audio/mp3");
+                        //return File(blobStream, file.Properties.ContentType, file.Name);
+                    }
+                    else
+                    {
+                        return Content("File does not exist");
+                    }
+                }
+                else
+                {
+                    return Content("Container does not exist");
+                }
+            }
+            else
+            {
+                return Content("Error opening storage");
+            }
+        }
+
+
         [HttpGet("list/{userid}")]
         public async Task<List<MusicInfo>> GetMusicListByUserId(int userid)
         {
             List<MusicInfo> res = new List<MusicInfo>();
-            await db.Musics.Where(m => m.UserId == userid).ForEachAsync(m => res.Add(new MusicInfo { Name = m.MusicName, Url = config.GetSection("ContainerURL").Value + m.MusicFileName }));
+            await db.Musics.Where(m => m.UserId == userid).ForEachAsync(m => res.Add(new MusicInfo { Name = m.MusicName, Url = config.GetSection("ContainerURL").Value + m.MusicFileName, FileName=m.MusicFileName }));
             return res;
         }
 
@@ -52,6 +94,7 @@ namespace CourseProjectMusic.Controllers
         public async Task<IActionResult> AddMusic([FromForm]AddMusicModel model)
         {
             User user = await db.Users.FindAsync(UserId);
+            string dateTimeNow = DateTime.Now.ToString();
             if (await db.Musics.Where(m => m.UserId == user.UserId && m.MusicName == model.MusicName).FirstOrDefaultAsync() != null)
                 return Ok(new { msg = $"У вас уже есть запись с названием {model.MusicName}" });
             try
@@ -60,10 +103,10 @@ namespace CourseProjectMusic.Controllers
                 {
                     CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                     CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.Value.ContainerName);
-                    CloudBlockBlob musicBlockBlob = container.GetBlockBlobReference($"{user.Login}_" + model.MusicFile.FileName);
+                    CloudBlockBlob musicBlockBlob = container.GetBlockBlobReference($"{user.Login}_{dateTimeNow}_" + model.MusicFile.FileName);
                     if (await musicBlockBlob.ExistsAsync())
                         return Ok(new { msg = $"В вашем хранилище уже есть файл {model.MusicFile.FileName}" });
-                    CloudBlockBlob imageBlockBlob = container.GetBlockBlobReference($"{user.Login}_" + model.MusicImageFile.FileName);
+                    CloudBlockBlob imageBlockBlob = container.GetBlockBlobReference($"{user.Login}_music_{dateTimeNow}_" + model.MusicImageFile.FileName);
                     if (await imageBlockBlob.ExistsAsync())
                         return Ok(new { msg = $"В вашем хранилище уже есть файл {model.MusicImageFile.FileName}" });
                     await musicBlockBlob.UploadFromStreamAsync(model.MusicFile.OpenReadStream());
@@ -71,8 +114,8 @@ namespace CourseProjectMusic.Controllers
                     db.Musics.Add(new Music
                     {
                         MusicName = model.MusicName,
-                        MusicFileName = $"{user.Login}_"+model.MusicFile.FileName,
-                        MusicImageName = $"{user.Login}_"+model.MusicImageFile.FileName,
+                        MusicFileName = $"{user.Login}_{dateTimeNow}_"+ model.MusicFile.FileName,
+                        MusicImageName = $"{user.Login}_music_{dateTimeNow}_" + model.MusicImageFile.FileName,
                         UserId = user.UserId,
                         DateOfPublication = DateTime.Now.Date,
                         MusicGenreId = model.MusicGenreId
