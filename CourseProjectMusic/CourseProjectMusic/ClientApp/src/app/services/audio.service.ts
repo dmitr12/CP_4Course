@@ -19,6 +19,7 @@ export class AudioService {
   currentAudioFileName: string = null;
 
   openFile(filename, name) {
+
     this.currentAudioFileName = filename;
     this.audioName = name;
     this.audioObj.src = `${this.apiUrl}api/music/DownloadFile/${filename}`;
@@ -73,6 +74,10 @@ export class AudioService {
   }
 
   mute() {
-    this.audioObj.volume = 0;
+    this.audioObj.muted = true;
+  }
+
+  unmute() {
+    this.audioObj.muted = false;
   }
 }

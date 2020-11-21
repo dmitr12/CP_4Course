@@ -28,14 +28,14 @@
     </div>
     <div class="col">
       <div class="row">
-        <div class="col-md-3" *ngIf="audioService.audioObj.volume!=0">
+        <div class="col-md-3" *ngIf="!audioService.audioObj.muted">
           <button mat-button>
             <mat-icon (click)="audioService.mute()">volume_up</mat-icon>
           </button>
         </div>
-        <div class="col-md-3" *ngIf="audioService.audioObj.volume==0">
+        <div class="col-md-3" *ngIf="audioService.audioObj.muted">
           <button mat-button>
-            <mat-icon>volume_off</mat-icon>
+            <mat-icon (click)="audioService.unmute()">volume_off</mat-icon>
           </button>
         </div>
         <div class="col-md-9">

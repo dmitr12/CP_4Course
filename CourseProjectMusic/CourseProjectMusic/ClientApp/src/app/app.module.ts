@@ -23,9 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthGuard } from './guards/auth-guard';
 import { ApplayoutComponent } from './layouts/applayout/applayout.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { MatSidenavModule, MatSelectModule} from '@angular/material';
+import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule} from '@angular/material';
 import { AddmusicComponent } from './addmusic/addmusic.component';
-
+import { LayoutModule } from '@angular/cdk/layout';
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
 }
@@ -53,6 +53,10 @@ export function tokenGetter() {
     MatSidenavModule,
     MatIconModule,
     MatSelectModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatListModule,
     JwtModule.forRoot({
       config: {
         tokenGetter/*,*/
