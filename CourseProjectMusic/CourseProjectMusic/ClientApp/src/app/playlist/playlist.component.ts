@@ -15,9 +15,11 @@ import { AuthService } from '../services/auth.service';
 export class PlaylistComponent implements OnInit {
 
   constructor(private http: HttpClient, private musicService: MusicService, private router: Router,
-    private authService: AuthService) { }
+    private authService: AuthService) {}
 
   files: MusicInfo[] = [];
+
+  facts = [];
 
   ngOnInit() {
     this.musicService.getListMusicByUserId(jwt_decode(this.authService.getAccessToken())['sub']).subscribe(result => {
@@ -30,5 +32,4 @@ export class PlaylistComponent implements OnInit {
   btnAddMusicClick() {
     this.router.navigate(['addmusic']);
   }
-
 }

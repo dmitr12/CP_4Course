@@ -1,3 +1,18 @@
+body{
+    padding: 10px;
+}
+
+.collection_element {
+  border: 1px solid purple;
+  border-radius: 10px;
+  min-width: 300px;
+  transition: all .3s;
+ }
+
+  .collection_element:hover {
+    background-color: rgb(150, 8, 252, 0.3)
+  }
+
 button, button:focus {
   background-color: white;
   color:black;
@@ -15,4 +30,21 @@ button:hover{
 .input-field input:focus {
   border-bottom: 1px solid #9608fc !important;
   box-shadow: 0 1px 0 0 #9608fc !important
+}
+
+.round{
+  border-radius:50%;
+  width:60px;
+  height:60px;
+  margin:5px;
+}
+
+.example-viewport {
+  height: 200px;
+  width: 200px;
+  border: 1px solid black;
+}
+
+.example-item {
+  height: 50px;
 }

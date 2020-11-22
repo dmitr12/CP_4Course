@@ -1,30 +1,29 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { API_URL } from '../app-injection-tokens';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AudioService {
+export class AudioService{
 
   constructor(@Inject(API_URL) private apiUrl: string) { }
 
   audioObj = new Audio();
 
   currentTime = '00:00';
-  duration = '00:00';
+  duration='00:00';
   delay;
   isPlaying = false;
   audioName = "";
   currentAudioFileName: string = null;
 
   openFile(filename, name) {
-
+    this.duration = '00:00';
     this.currentAudioFileName = filename;
     this.audioName = name;
     this.audioObj.src = `${this.apiUrl}api/music/DownloadFile/${filename}`;
     this.audioObj.preload = "auto"
-
     this.audioObj.load();
     this.play();
     this.updateProgress();
@@ -67,7 +66,9 @@ export class AudioService {
 
   updateProgress() {
     this.currentTime = this.timeFormat(this.audioObj.currentTime);
-    this.duration = this.timeFormat(this.audioObj.duration);
+    if (this.timeFormat(this.audioObj.duration)!='Invalid date') {
+      this.duration = this.timeFormat(this.audioObj.duration);
+    }
     this.delay = setTimeout(() => {
       this.updateProgress();
     }, 1000);

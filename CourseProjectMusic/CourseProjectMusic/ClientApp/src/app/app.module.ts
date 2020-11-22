@@ -26,6 +26,7 @@ import { PlaylistComponent } from './playlist/playlist.component';
 import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule} from '@angular/material';
 import { AddmusicComponent } from './addmusic/addmusic.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
 }
@@ -57,6 +58,7 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatListModule,
+    ScrollingModule,
     JwtModule.forRoot({
       config: {
         tokenGetter/*,*/

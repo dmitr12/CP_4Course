@@ -1,21 +1,26 @@
-<div class="page-title" style="display: flex; justify-content:space-between; flex-wrap: wrap">
-  <div>
-    <h5>Моя музыка</h5>
-  </div>
-  <div>
-    <button class="btn waves-effect waves-purple" (click)="btnAddMusicClick()">Добавить</button>
-  </div>
-</div>
-
-<app-audioplayer #player></app-audioplayer>
-
-<div class="row">
-  <div class="col s12">
-    <div class="collection" *ngFor="let file of files">
-      <a class="collection-item" (click)="player.openFile(file.fileName, file.name)">{{file.name}}</a>
+<body>
+  <div class="page-title" style="display: flex; justify-content:space-between; flex-wrap: wrap">
+    <div>
+      <h5>Моя музыка</h5>
+    </div>
+    <div>
+      <button class="btn waves-effect waves-purple" (click)="btnAddMusicClick()">Добавить</button>
     </div>
   </div>
-</div>
-<div style="text-align:center" *ngIf="files.length==0">
-  У вас пока нет аудиозаписей
-</div>
+
+  <app-audioplayer #player></app-audioplayer>
+
+  <div>
+    <cdk-virtual-scroll-viewport itemSize="100" class="example-viewport" style="height:550px; width:100%; border:none; margin-top:20px;">
+      <div *cdkVirtualFor="let file of files" class="row collection_element" (click)="player.openFile(file.fileName, file.name)" style="width:100%;">
+        <img src="{{file.img}}" alt="Alternate Text" class="round" />
+        <p>{{file.name}}</p>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+  <div style="text-align:center" *ngIf="files.length==0">
+    У вас пока нет аудиозаписей
+  </div>
+
+</body>
+
