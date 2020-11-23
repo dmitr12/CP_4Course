@@ -20,8 +20,20 @@ export class MusicService {
     return this.http.get<MusicInfo[]>(`${this.apiUrl}api/music/list/` + id);
   }
 
+  getMusicInfoById(id: number): Observable<MusicInfo>{
+    return this.http.get < MusicInfo>(`${this.apiUrl}api/music/` + id);
+  }
+
   addmusic(formData: FormData) {
     return this.http.post(`${this.apiUrl}api/music/AddMusic`, formData);
+  }
+
+  editmusic(formData: FormData) {
+    return this.http.put(`${this.apiUrl}api/music/EditMusic`, formData);
+  }
+
+  deleteMusic(idMusic: number): Observable<MusicInfo[]> {
+    return this.http.delete<MusicInfo[]>(`${this.apiUrl}api/music/delete/` + idMusic);
   }
 
   getFileNameByPath(path: string):string {
@@ -34,6 +46,5 @@ export class MusicService {
     if (format == regularFormat)
       return true;
     return false;
-    
   }
 }

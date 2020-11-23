@@ -13,7 +13,7 @@ export class AudioplayerComponent implements OnInit {
   ngOnInit() {
   }
 
-  openFile(name, url) {
-    this.audioService.openFile(name, url);
+  openFile(idM, name, url) {
+    this.audioService.openFile(idM, name, url);
   }
 }

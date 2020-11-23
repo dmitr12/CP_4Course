@@ -27,6 +27,7 @@ import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, M
 import { AddmusicComponent } from './addmusic/addmusic.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { EditmusicComponent } from './editmusic/editmusic.component';
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
 }
@@ -44,7 +45,8 @@ export function tokenGetter() {
     AudioplayerComponent,
     ApplayoutComponent,
     PlaylistComponent,
-    AddmusicComponent
+    AddmusicComponent,
+    EditmusicComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -77,7 +79,8 @@ export function tokenGetter() {
         path: '', component: ApplayoutComponent, canActivate: [AuthGuard], children: [
           { path: '', redirectTo: 'playlist', pathMatch: 'full'},
           { path: 'playlist', component: PlaylistComponent },
-          { path: 'addmusic', component: AddmusicComponent }
+          { path: 'addmusic', component: AddmusicComponent },
+          { path: 'editmusic/:id', component: EditmusicComponent }
         ]
       }
       //{ path: '', component: HomeComponent, pathMatch: 'full' },

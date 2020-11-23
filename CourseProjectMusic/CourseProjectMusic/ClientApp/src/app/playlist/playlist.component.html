@@ -12,9 +12,11 @@
 
   <div>
     <cdk-virtual-scroll-viewport itemSize="100" class="example-viewport" style="height:550px; width:100%; border:none; margin-top:20px;">
-      <div *cdkVirtualFor="let file of files" class="row collection_element" (click)="player.openFile(file.fileName, file.name)" style="width:100%;">
-        <img src="{{file.img}}" alt="Alternate Text" class="round" />
+      <div *cdkVirtualFor="let file of files" class="row collection_element" (click)="player.openFile(file.id, file.fileName, file.name)" style="width:100%;">
+        <img src="{{file.img}}" class="round" />
         <p>{{file.name}}</p>
+        <button (click)="btnEditMusicClick(file.id)">Изменить</button>
+        <button (click)="deleteMusic(file.id)">Удалить</button>
       </div>
     </cdk-virtual-scroll-viewport>
   </div>
@@ -22,5 +24,6 @@
     У вас пока нет аудиозаписей
   </div>
 
+  <button (click)="clearMusic()">stop music</button>
 </body>
 

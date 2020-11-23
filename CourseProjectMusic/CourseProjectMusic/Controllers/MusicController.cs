@@ -54,7 +54,6 @@ namespace CourseProjectMusic.Controllers
                         Response.Headers.Add("Accept-Ranges", "bytes");
 
                         return new FileStreamResult(blobStream, "audio/mp3");
-                        //return File(blobStream, file.Properties.ContentType, file.Name);
                     }
                     else
                     {
@@ -72,13 +71,28 @@ namespace CourseProjectMusic.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<MusicInfo> GetMusicInfoById(int id)
+        {
+            Music music = await db.Musics.FindAsync(id);
+            return new MusicInfo
+            {
+                Id = music.MusicId,
+                Name = music.MusicName,
+                Url = config.GetSection("ContainerURL").Value + music.MusicFileName,
+                FileName = music.MusicFileName,
+                Img = config.GetSection("ContainerURL").Value + music.MusicImageName,
+                GenreId = music.MusicGenreId
+            };
+        }
+
 
         [HttpGet("list/{userid}")]
         public async Task<List<MusicInfo>> GetMusicListByUserId(int userid)
         {
             List<MusicInfo> res = new List<MusicInfo>();
-            await db.Musics.Where(m => m.UserId == userid).ForEachAsync(m => res.Add(new MusicInfo { Name = m.MusicName, Url = config.GetSection("ContainerURL").Value + m.MusicFileName, 
-                FileName=m.MusicFileName, Img=config.GetSection("ContainerURL").Value+m.MusicImageName }));
+            await db.Musics.Where(m => m.UserId == userid).ForEachAsync(m => res.Add(new MusicInfo {Id=m.MusicId, Name = m.MusicName, Url = config.GetSection("ContainerURL").Value + m.MusicFileName, 
+                FileName=m.MusicFileName, Img=config.GetSection("ContainerURL").Value+m.MusicImageName, GenreId=m.MusicGenreId }));
             return res;
         }
 
@@ -133,6 +147,51 @@ namespace CourseProjectMusic.Controllers
             {
                 return StatusCode(500);
             }
+        }
+
+        //[HttpPut("EditMusic")]
+        //[Authorize]
+        //public async Task<IActionResult> EditMusic([FromForm] AddMusicModel model)
+        //{
+
+        //}
+
+        [Authorize]
+        [HttpDelete("Delete/{id}")]
+        public async Task<List<MusicInfo>> DeleteMusic(int id)
+        {
+            User user = await db.Users.FindAsync(UserId);
+            Music music = await db.Musics.FindAsync(id);
+            List<MusicInfo> res = new List<MusicInfo>();
+            if (music != null)
+            {
+                try
+                {
+                    if(CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
+                    {
+                        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                        CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.Value.ContainerName);
+                        if(await container.ExistsAsync())
+                        {
+                            CloudBlob blob = container.GetBlobReference(music.MusicFileName);
+                            if (await blob.ExistsAsync())
+                                await blob.DeleteAsync();
+                            if (music.MusicImageName != "default.png")
+                            {
+                                blob = container.GetBlobReference(music.MusicImageName);
+                                if (await blob.ExistsAsync())
+                                    await blob.DeleteAsync();
+                            }  
+                            db.Musics.Remove(music);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+            return await GetMusicListByUserId(UserId);
         }
     }
 }

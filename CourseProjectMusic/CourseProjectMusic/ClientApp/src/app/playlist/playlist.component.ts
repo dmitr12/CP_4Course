@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import jwt_decode from 'jwt-decode';
 import { AuthService } from '../services/auth.service';
+import { AudioService } from '../services/audio.service';
 
 @Component({
   selector: 'app-playlist',
@@ -15,7 +16,7 @@ import { AuthService } from '../services/auth.service';
 export class PlaylistComponent implements OnInit {
 
   constructor(private http: HttpClient, private musicService: MusicService, private router: Router,
-    private authService: AuthService) {}
+    private authService: AuthService, private audioService: AudioService) { }
 
   files: MusicInfo[] = [];
 
@@ -31,5 +32,24 @@ export class PlaylistComponent implements OnInit {
 
   btnAddMusicClick() {
     this.router.navigate(['addmusic']);
+  }
+
+  btnEditMusicClick(id) {
+    this.router.navigate(['editmusic',`${id}`]);
+  }
+
+  deleteMusic(id) {
+    this.musicService.deleteMusic(id).subscribe(result => {
+      this.files = result;
+      if (this.audioService.idMusic == id) {
+        this.audioService.clearMusic();
+      }
+    }, error => {
+      alert(error.message);
+    });
+  }
+
+  clearMusic() {
+    this.audioService.clearMusic();
   }
 }
