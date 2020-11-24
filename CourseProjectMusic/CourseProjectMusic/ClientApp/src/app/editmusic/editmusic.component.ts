@@ -6,6 +6,7 @@ import { API_URL } from '../app-injection-tokens';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MusicInfo } from '../models/music_info';
+import { AudioService } from '../services/audio.service';
 
 @Component({
   selector: 'app-editmusic',
@@ -23,7 +24,8 @@ export class EditmusicComponent implements OnInit {
   files: string[] = [];
   formData: FormData;
 
-  constructor(private musicService: MusicService, private router: Router, private activateRoute: ActivatedRoute) {
+  constructor(private musicService: MusicService, private router: Router, private activateRoute: ActivatedRoute,
+    private audioService: AudioService) {
     this.subscription = activateRoute.params.subscribe(params => this.id = params['id']);
   }
 
@@ -40,6 +42,7 @@ export class EditmusicComponent implements OnInit {
       alert(error.message)
     });
     this.formData = new FormData();
+    this.formData.append("Id", this.id.toString())
     this.form = new FormGroup({
       musicName: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       musicFileName: new FormControl(null),
@@ -87,11 +90,15 @@ export class EditmusicComponent implements OnInit {
     this.formData.append("MusicName", this.form.value.musicName);
     this.musicService.editmusic(this.formData).subscribe((response: any) => {
       if (response['msg'] == '') {
-        alert('Запись успешно добавлена');
+        if (this.audioService.idMusic == this.id) {
+          this.audioService.clearMusic();
+        }
+        alert('Запись успешно изменена');
         this.router.navigate(['']);
       }
-      else
+      else {
         alert(response['msg']);
+      }
     },
       err => alert('Статусный код ' + err.status),
     );

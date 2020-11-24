@@ -149,12 +149,49 @@ namespace CourseProjectMusic.Controllers
             }
         }
 
-        //[HttpPut("EditMusic")]
-        //[Authorize]
-        //public async Task<IActionResult> EditMusic([FromForm] AddMusicModel model)
-        //{
-
-        //}
+        [HttpPut("EditMusic")]
+        [Authorize]
+        public async Task<IActionResult> EditMusic([FromForm] EditMusicModel model)
+        {
+            string musicFileName, imageFileName;
+            User user = await db.Users.FindAsync(UserId);
+            Music music = await db.Musics.FindAsync(model.Id);
+            if (music.MusicName!=model.MusicName && await db.Musics.Where(m => m.UserId == user.UserId && m.MusicName == model.MusicName).FirstOrDefaultAsync() != null)
+                return Ok(new { msg = $"У вас уже есть запись с названием {model.MusicName}" });
+            string dateTimeNow = DateTime.Now.ToString();
+            try
+            {
+                if (CloudStorageAccount.TryParse(storageConfig.Value.ConnectionString, out CloudStorageAccount storageAccount))
+                {
+                    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                    CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.Value.ContainerName);
+                    if (model.MusicFile != null)
+                    {
+                        musicFileName = $"{user.Login}_{dateTimeNow}_" + model.MusicFile.FileName;
+                        CloudBlockBlob musicBlockBlob = container.GetBlockBlobReference(music.MusicFileName);
+                        await musicBlockBlob.DeleteIfExistsAsync();
+                        musicBlockBlob = container.GetBlockBlobReference(musicFileName);
+                        await musicBlockBlob.UploadFromStreamAsync(model.MusicFile.OpenReadStream());
+                        music.MusicFileName = musicFileName;
+                    }
+                    if (model.MusicImageFile != null)
+                    {
+                        imageFileName = $"{user.Login}_music_{dateTimeNow}_" + model.MusicImageFile.FileName;
+                        CloudBlockBlob imageBlockBlob = container.GetBlockBlobReference(music.MusicImageName);
+                        await imageBlockBlob.DeleteIfExistsAsync();
+                        imageBlockBlob = container.GetBlockBlobReference(imageFileName);
+                        await imageBlockBlob.UploadFromStreamAsync(model.MusicImageFile.OpenReadStream());
+                        music.MusicImageName = imageFileName;
+                    }
+                    music.MusicName = model.MusicName;
+                    music.MusicGenreId = model.MusicGenreId;
+                    await db.SaveChangesAsync();
+                    return Ok(new {msg=""});
+                }
+            }
+            catch { }
+            return StatusCode(500);
+        }
 
         [Authorize]
         [HttpDelete("Delete/{id}")]

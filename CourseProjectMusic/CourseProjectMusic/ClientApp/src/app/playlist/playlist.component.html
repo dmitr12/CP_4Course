@@ -12,18 +12,27 @@
 
   <div>
     <cdk-virtual-scroll-viewport itemSize="100" class="example-viewport" style="height:550px; width:100%; border:none; margin-top:20px;">
-      <div *cdkVirtualFor="let file of files" class="row collection_element" (click)="player.openFile(file.id, file.fileName, file.name)" style="width:100%;">
-        <img src="{{file.img}}" class="round" />
-        <p>{{file.name}}</p>
-        <button (click)="btnEditMusicClick(file.id)">Изменить</button>
-        <button (click)="deleteMusic(file.id)">Удалить</button>
+      <div *cdkVirtualFor="let file of files" class="row collection_element" style="width:100%; min-width:300px">
+        <div class="col-3 col-md-1" (click)="player.openFile(file.id, file.fileName, file.name)">
+          <img src="{{file.img}}" class="round" />
+        </div>
+        <div class="col-7 col-md-10 row align-items-center justify-content-start" (click)="player.openFile(file.id, file.fileName, file.name)" >
+          <div>
+            {{file.name}}
+          </div>
+        </div>
+        <div class="col-2 col-md-1 row align-items-center justify-content-end">
+            <mat-icon class="context-menu waves-effect waves-purple" mat-flat-button [matMenuTriggerFor]="appMenu">more_vert</mat-icon>
+            <mat-menu #appMenu="matMenu">
+              <button mat-menu-item (click)="btnEditMusicClick(file.id)">Изменить</button>
+              <button mat-menu-item (click)="deleteMusic(file.id)">Удалить</button>
+            </mat-menu>
+        </div>
       </div>
     </cdk-virtual-scroll-viewport>
   </div>
   <div style="text-align:center" *ngIf="files.length==0">
     У вас пока нет аудиозаписей
   </div>
-
-  <button (click)="clearMusic()">stop music</button>
 </body>
 

@@ -5,7 +5,7 @@
       <span class="card-title center-align">Изменить запись</span>
       <div class="input-field">
         <input id="musicName" required type="text" formControlName="musicName" [(ngModel)]="this.musicInfo.name">
-        <label for="musicName">Название записи</label>
+        <label for="musicName">*Название записи</label>
       </div>
       <div class="input-field">
         <div>
@@ -20,7 +20,7 @@
         <input id="musicImageName" type="file" accept=".jpg, .png" formControlName="musicImageName" (change)="changeImageFile($event.target.files)">
       </div>
       <mat-form-field appearance="fill">
-        <label>Жанр музыки</label>
+        <label>*Жанр музыки</label>
         <mat-select id="musicGenreId" formControlName="musicGenreId" [(ngModel)]="this.musicInfo.genreId">
           <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
             {{genre.name}}

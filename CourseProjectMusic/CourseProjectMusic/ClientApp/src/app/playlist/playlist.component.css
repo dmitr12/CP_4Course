@@ -2,6 +2,11 @@ body{
     padding: 10px;
 }
 
+.context-menu{
+   cursor:default;
+   border-radius: 50%;
+}
+
 .collection_element {
   border: 1px solid purple;
   border-radius: 10px;

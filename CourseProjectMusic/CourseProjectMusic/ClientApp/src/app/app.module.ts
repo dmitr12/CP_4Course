@@ -23,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthGuard } from './guards/auth-guard';
 import { ApplayoutComponent } from './layouts/applayout/applayout.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule} from '@angular/material';
+import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule, MatMenuModule } from '@angular/material';
 import { AddmusicComponent } from './addmusic/addmusic.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -60,6 +60,7 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatListModule,
+    MatMenuModule,
     ScrollingModule,
     JwtModule.forRoot({
       config: {
