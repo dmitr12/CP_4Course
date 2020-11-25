@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MusicGenreInfo } from '../models/musicgenre_info';
 import { API_URL } from '../app-injection-tokens';
 import { MusicInfo } from '../models/music_info';
+import { FilteredMusicList } from '../models/filtered_music';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ import { MusicInfo } from '../models/music_info';
 export class MusicService {
 
   constructor(private http: HttpClient, @Inject(API_URL) private apiUrl: string) { }
+
+  getFilteredMusicList(filter: FilteredMusicList): Observable<MusicInfo[]> {
+    let httpParams = new HttpParams().set('MusicName', filter.musicName).set('GenreId', filter.genreId.toString());
+    return this.http.get<MusicInfo[]>(`${this.apiUrl}api/music/FilterMusic/`, { params: httpParams });
+  }
 
   getListMusicGenres(): Observable<MusicGenreInfo[]> {
     return this.http.get<MusicGenreInfo[]>(`${this.apiUrl}api/music/listMusicGenres`)

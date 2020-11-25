@@ -1,0 +1,20 @@
+<form class="row" style="justify-content:center" [formGroup]="form" (ngSubmit)="search()">
+  <div style="margin: 5px;" class="row align-items-end">
+      <mat-form-field appearance="fill">
+        <label>Жанр музыки</label>
+        <mat-select id="musicGenreId" formControlName="musicGenreId">
+          <mat-option value="0">Любой</mat-option>
+          <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
+            {{genre.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  </div>
+  <div style="margin: 5px;">
+    <input id="musicName" required type="text" formControlName="musicName" value="">
+  </div>
+  <div style="margin: 5px;">
+    <button type="submit" class="btn waves-effect waves-purple">Поиск</button>
+  </div>
+</form>
+<button (click)="check()">check</button>

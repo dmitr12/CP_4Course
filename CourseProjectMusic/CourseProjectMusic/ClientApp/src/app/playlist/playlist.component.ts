@@ -52,4 +52,8 @@ export class PlaylistComponent implements OnInit {
   clearMusic() {
     this.audioService.clearMusic();
   }
+
+  openFile(idM, name, url) {
+    this.audioService.openFile(idM, name, url);
+  }
 }

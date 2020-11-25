@@ -1,29 +1,5 @@
-<!--<body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container">
-
-    <div class="topnav">
-      <a [routerLink]="['']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-    </div>
-
-    <div *ngIf="!isLoggedIn">
-      <input type="text" #username />
-      <input type="text" #password />
-      <button (click)="login(username.value, password.value)">Login</button>
-    </div>
-
-    <div *ngIf="isLoggedIn">
-      <button (click)="logout()">LogOut</button>
-    </div>
-
-    <router-outlet></router-outlet>
-  </div>
-</body>-->
 <div>
   <router-outlet></router-outlet>
 </div>
 
-
-<!--<input type="file" id="fileUpload" #selectedFile value="" (change)="handleFileInput($event.target.files)"/>
-<button (click)="cl()">click</button>-->
 

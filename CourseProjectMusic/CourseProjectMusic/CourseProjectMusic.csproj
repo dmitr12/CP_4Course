@@ -33,6 +33,7 @@
     <None Remove="ClientApp\src\app\app-injection-tokens.ts" />
     <None Remove="ClientApp\src\app\app.component.html~RF2d16270.TMP" />
     <None Remove="ClientApp\src\app\guards\auth-guard.ts" />
+    <None Remove="ClientApp\src\app\models\filtered_music.ts" />
     <None Remove="ClientApp\src\app\models\musicgenre_info.ts" />
     <None Remove="ClientApp\src\app\models\music_info.ts" />
     <None Remove="ClientApp\src\app\models\token.ts" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\app-injection-tokens.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\guards\auth-guard.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\filtered_music.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\musicgenre_info.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\music_info.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\token.ts" />

@@ -2,6 +2,7 @@ create database Music_DB;
 go
 create table Users(
 UserId int primary key identity(1,1),
+RoleId int references UserRoles(RoleId) not null,
 Login nvarchar(50) not null unique,
 Mail nvarchar(100) not null unique,
 Password nvarchar(500) not null,
@@ -11,6 +12,13 @@ Surname nvarchar(100),
 Country nvarchar(100),
 City nvarchar(100)
 );
+go
+create table UserRoles(
+RoleId int primary key identity(1,1),
+RoleName nvarchar(50) not null unique
+)
+go
+insert into UserRoles values('User'),('Admin')
 go
 create table MusicGenres(
 MusicGenreId int primary key identity(1,1),

@@ -7,6 +7,9 @@ using CourseProjectMusic.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace CourseProjectMusic.Controllers
 {
@@ -15,10 +18,12 @@ namespace CourseProjectMusic.Controllers
     public class RegisterUserController : ControllerBase
     {
         DataBaseContext db;
+        private readonly IOptions<StorageConfiguration> storageConfig;
 
-        public RegisterUserController(DataBaseContext db)
+        public RegisterUserController(DataBaseContext db, IOptions<StorageConfiguration> sc)
         {
             this.db = db;
+            storageConfig = sc;
         }
 
         [HttpPost]
@@ -32,7 +37,8 @@ namespace CourseProjectMusic.Controllers
                 us= await db.Users.Where(u => u.Login == model.Login).FirstOrDefaultAsync();
                 if(us!=null)
                     return Ok(new { msg = $"Пользователь с {model.Login} уже зарегистрирован" });
-                User user = new User { Mail = model.Mail, Login = model.Login, Password = HashClass.GetHash(model.Password)};
+                User user = new User { Mail = model.Mail, Login = model.Login, Password = HashClass.GetHash(model.Password),
+                    RoleId=1, Avatar="user_icon.png"};
                 try
                 {
                     db.Users.Add(user);

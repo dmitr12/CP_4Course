@@ -52,11 +52,7 @@ namespace CourseProjectMusic.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString())
             };
             claims.Add(new Claim("login", user.Login));
-            //foreach (var role in user.Roles)
-            //{
-            //    claims.Add(new Claim("role", role.ToString()));
-            //}
-
+            claims.Add(new Claim("role", db.UserRoles.Find(user.RoleId).RoleName));
             var token = new JwtSecurityToken(issuer: authParams.Issuer, audience: authParams.Audience, claims: claims, notBefore:DateTime.Now, expires: DateTime.Now.AddSeconds(authParams.TokenLifeTime),
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);

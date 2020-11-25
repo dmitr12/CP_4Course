@@ -11,6 +11,9 @@ namespace CourseProjectMusic.Models
         public int UserId { get; set; }
 
         [Required]
+        public int RoleId { get; set; }
+
+        [Required]
         [StringLength(maximumLength: 50, MinimumLength = 3)]
         public string Login { get; set; }
 

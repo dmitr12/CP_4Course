@@ -32,6 +32,49 @@ namespace CourseProjectMusic.Controllers
             storageConfig = sc;
         }
 
+        //[HttpGet("Join")]
+        //public async Task<IActionResult> test()
+        //{
+        //    List<MusicInfo> list = await db.Musics.Join(db.Users, m => m.UserId, u => u.UserId, (m, u) =>new MusicInfo
+        //    {
+        //        Id=m.MusicId,
+        //        Name=m.MusicName,
+        //        Url = config.GetSection("ContainerURL").Value + m.MusicFileName,
+        //        FileName = m.MusicFileName,
+        //        Img = config.GetSection("ContainerURL").Value + m.MusicImageName,
+        //        GenreId = m.MusicGenreId,
+        //        UserId=u.UserId,
+        //        UserLogin=u.Login
+        //    }).ToListAsync();
+        //    return Ok(list);
+        //}
+
+        [HttpGet("FilterMusic")]
+        public async Task<List<MusicInfo>> GetFilteredList(string musicName, int genreId)
+        {
+            FilteredMusicList fl = new FilteredMusicList { MusicName = musicName==null?"":musicName, GenreId = genreId };
+            string musicNameFilter = fl.MusicName.Length > 0 ? fl.MusicName : String.Empty;
+            string musicGenreFilter = fl.GenreId > 0 ? fl.GenreId.ToString() : "%";
+            List<MusicInfo> res = new List<MusicInfo>();
+            try
+            {
+                 await db.Musics.Where(m => EF.Functions.Like(m.MusicName, $"%{musicNameFilter}%") 
+               & EF.Functions.Like(m.MusicGenreId.ToString(), $"{musicGenreFilter}")).ForEachAsync(m => res.Add(new MusicInfo
+               {
+                  Id = m.MusicId,
+                  Name = m.MusicName,
+                  Url = config.GetSection("ContainerURL").Value + m.MusicFileName,
+                  FileName = m.MusicFileName,
+                  Img = config.GetSection("ContainerURL").Value + m.MusicImageName,
+                  GenreId = m.MusicGenreId
+               }));
+               return res;
+            }
+            catch
+            {
+                return new List<MusicInfo>();
+            }
+        }
 
         [HttpGet("DownloadFile/{fileName}")]
         public async Task<IActionResult> DownloadFile(string fileName)
@@ -105,7 +148,7 @@ namespace CourseProjectMusic.Controllers
         }
 
         [HttpPost("AddMusic")]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AddMusic([FromForm]AddMusicModel model)
         {
             User user = await db.Users.FindAsync(UserId);
@@ -150,7 +193,7 @@ namespace CourseProjectMusic.Controllers
         }
 
         [HttpPut("EditMusic")]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> EditMusic([FromForm] EditMusicModel model)
         {
             string musicFileName, imageFileName;
@@ -193,7 +236,7 @@ namespace CourseProjectMusic.Controllers
             return StatusCode(500);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpDelete("Delete/{id}")]
         public async Task<List<MusicInfo>> DeleteMusic(int id)
         {
