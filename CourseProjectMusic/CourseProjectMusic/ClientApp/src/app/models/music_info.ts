@@ -5,4 +5,6 @@ export class MusicInfo {
   fileName: string;
   img: string;
   genreId: number;
+  userId: number; 
+  userLogin: string;
 }

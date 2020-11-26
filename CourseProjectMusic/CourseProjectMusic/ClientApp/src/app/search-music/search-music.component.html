@@ -1,14 +1,14 @@
 <form class="row" style="justify-content:center" [formGroup]="form" (ngSubmit)="search()">
   <div style="margin: 5px;" class="row align-items-end">
-      <mat-form-field appearance="fill">
-        <label>Жанр музыки</label>
-        <mat-select id="musicGenreId" formControlName="musicGenreId">
-          <mat-option value="0">Любой</mat-option>
-          <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
-            {{genre.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label>Жанр музыки</label>
+      <mat-select id="musicGenreId" formControlName="musicGenreId">
+        <mat-option value="0">Любой</mat-option>
+        <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
+          {{genre.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div style="margin: 5px;">
     <input id="musicName" required type="text" formControlName="musicName" value="">
@@ -17,4 +17,23 @@
     <button type="submit" class="btn waves-effect waves-purple">Поиск</button>
   </div>
 </form>
-<button (click)="check()">check</button>
+
+
+<div class="row" style="padding:5px">
+  <div class="col-4 col-sm-3 col-md-2 col-lg-2 test" *ngFor="let data of dataSearch | paginate: {id: 'listing_pagination',
+  itemsPerPage: 12,
+  currentPage: page,
+  totalItems: totalRecords}">
+    <img style="height:150px" class="card-img-top" src="{{data.img}}" alt="Alternate Text" (click)="openFile(data.id, data.fileName, data.name)"/>
+    <div class="card-body d-flex flex-column" style="font-size: 75%; white-space: nowrap; overflow: hidden; text-overflow: clip">
+      <p class="card-text">{{data.name}}</p>
+      <p class="card-text">{{data.userLogin}}</p>
+      <p class="card-text">{{getGenreName(data.genreId)}}</p>
+    </div>
+  </div>
+</div>
+<div style="text-align:center" *ngIf="dataSearch.length>0">
+  <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page=$event"></pagination-controls>
+</div>
+
+

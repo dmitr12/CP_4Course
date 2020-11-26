@@ -13,7 +13,7 @@ namespace CourseProjectMusic.Models
         public string FileName { get; set; }
         public string Img { get; set; }
         public int GenreId { get; set; }
-        //public int UserId { get; set; }
-        //public string UserLogin { get; set; }
+        public int UserId { get; set; }
+        public string UserLogin { get; set; }
     }
 }

@@ -58,20 +58,23 @@ namespace CourseProjectMusic.Controllers
             List<MusicInfo> res = new List<MusicInfo>();
             try
             {
-                 await db.Musics.Where(m => EF.Functions.Like(m.MusicName, $"%{musicNameFilter}%") 
-               & EF.Functions.Like(m.MusicGenreId.ToString(), $"{musicGenreFilter}")).ForEachAsync(m => res.Add(new MusicInfo
+               res=await db.Musics.Where(m => EF.Functions.Like(m.MusicName, $"%{musicNameFilter}%") 
+               & EF.Functions.Like(m.MusicGenreId.ToString(), $"{musicGenreFilter}")).Join(db.Users, m => m.UserId, u => u.UserId, (m, u) => new MusicInfo
                {
-                  Id = m.MusicId,
-                  Name = m.MusicName,
-                  Url = config.GetSection("ContainerURL").Value + m.MusicFileName,
-                  FileName = m.MusicFileName,
-                  Img = config.GetSection("ContainerURL").Value + m.MusicImageName,
-                  GenreId = m.MusicGenreId
-               }));
-               return res;
+                   Id = m.MusicId,
+                   Name = m.MusicName,
+                   Url = config.GetSection("ContainerURL").Value + m.MusicFileName,
+                   FileName = m.MusicFileName,
+                   Img = config.GetSection("ContainerURL").Value + m.MusicImageName,
+                   GenreId = m.MusicGenreId,
+                   UserId = u.UserId,
+                   UserLogin = u.Login
+               }).ToListAsync();
+                return res;
             }
             catch
             {
+                Response.StatusCode = 500;
                 return new List<MusicInfo>();
             }
         }

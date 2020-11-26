@@ -29,6 +29,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { EditmusicComponent } from './editmusic/editmusic.component';
 import { SearchMusicComponent } from './search-music/search-music.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
 }
@@ -61,6 +63,7 @@ export function tokenGetter() {
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
+    NgxPaginationModule,
     MatListModule,
     MatMenuModule,
     ScrollingModule,

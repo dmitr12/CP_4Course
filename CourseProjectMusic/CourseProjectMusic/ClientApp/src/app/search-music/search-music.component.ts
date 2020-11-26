@@ -3,6 +3,8 @@ import { MusicGenreInfo } from '../models/musicgenre_info';
 import { MusicService } from '../services/music.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { FilteredMusicList } from '../models/filtered_music';
+import { MusicInfo } from '../models/music_info';
+import { AudioService } from '../services/audio.service';
 
 @Component({
   selector: 'app-search-music',
@@ -12,11 +14,14 @@ import { FilteredMusicList } from '../models/filtered_music';
 export class SearchMusicComponent implements OnInit {
 
   musicGenres: MusicGenreInfo[] = [];
+  dataSearch: MusicInfo[] = [];
   form: FormGroup;
   selectedOption = '0';
   filteredList: FilteredMusicList = new FilteredMusicList();
+  totalRecords: string;
+  page: number = 1;
 
-  constructor(private musicService: MusicService) { }
+  constructor(private musicService: MusicService, private audioService: AudioService) { }
 
   ngOnInit() {
     this.musicService.getListMusicGenres().subscribe(data => {
@@ -31,13 +36,21 @@ export class SearchMusicComponent implements OnInit {
     })
   }
 
+  getGenreName(id: number) {
+    return this.musicGenres.find(g => g.id === id).name;
+  }
+
   search() {
     this.filteredList.musicName = this.form.value.musicName;
     this.filteredList.genreId = this.form.value.musicGenreId;
     this.musicService.getFilteredMusicList(this.filteredList).subscribe(result => {
-      console.log(result)
+      this.dataSearch = result;
     }, error => {
         alert('Статусный код '+error.status)
     })
+  }
+
+  openFile(idM, name, url) {
+    this.audioService.openFile(idM, name, url);
   }
 }
