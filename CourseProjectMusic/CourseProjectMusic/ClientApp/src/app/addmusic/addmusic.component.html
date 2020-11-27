@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="min-width:300px">
   <div class="col-md-1"></div>
   <form class="card col-md-10" [formGroup]="form" (ngSubmit)="add()">
     <div class="card-content">
@@ -7,6 +7,14 @@
         <input id="musicName" required type="text" formControlName="musicName">
         <label for="musicName">*Название записи</label>
       </div>
+      <mat-form-field appearance="fill" style="width:100%">
+        <label>*Жанр музыки</label>
+        <mat-select id="musicGenreId" formControlName="musicGenreId">
+          <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
+            {{genre.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <div class="input-field">
         <div>
           <span>*Выберите файл записи (формат .mp3)</span>
@@ -19,14 +27,6 @@
         </div>
         <input id="musicImageName" type="file" accept=".jpg, .png" formControlName="musicImageName" (change)="changeImageFile($event.target.files)">
       </div>
-      <mat-form-field appearance="fill">
-        <label>*Жанр музыки</label>
-        <mat-select id="musicGenreId" formControlName="musicGenreId">
-          <mat-option *ngFor="let genre of musicGenres" [value]="genre.id">
-            {{genre.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
     <div class="card-action center-align">
       <button type="submit" class="btn waves-effect waves-purple" [disabled]="form.invalid">Добавить</button>

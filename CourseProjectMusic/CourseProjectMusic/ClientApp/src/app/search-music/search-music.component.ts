@@ -5,6 +5,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { FilteredMusicList } from '../models/filtered_music';
 import { MusicInfo } from '../models/music_info';
 import { AudioService } from '../services/audio.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-music',
@@ -21,7 +22,7 @@ export class SearchMusicComponent implements OnInit {
   totalRecords: string;
   page: number = 1;
 
-  constructor(private musicService: MusicService, private audioService: AudioService) { }
+  constructor(private musicService: MusicService, private audioService: AudioService, private router: Router) { }
 
   ngOnInit() {
     this.musicService.getListMusicGenres().subscribe(data => {
@@ -50,7 +51,7 @@ export class SearchMusicComponent implements OnInit {
     })
   }
 
-  openFile(idM, name, url) {
-    this.audioService.openFile(idM, name, url);
+  getInfoPage(id: number) {
+    this.router.navigate(['musicinfo', `${id}`])
   }
 }

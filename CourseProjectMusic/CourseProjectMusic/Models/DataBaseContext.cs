@@ -12,7 +12,13 @@ namespace CourseProjectMusic.Models
         public DbSet<MusicGenre> MusicGenres { get; set; }
         public DbSet<Music> Musics { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserMusicLike> UserMusicLikes { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserMusicLike>().HasKey(um => new { um.MusicId, um.UserId });
+        }
     }
 }

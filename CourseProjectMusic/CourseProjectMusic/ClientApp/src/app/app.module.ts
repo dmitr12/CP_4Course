@@ -30,6 +30,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { EditmusicComponent } from './editmusic/editmusic.component';
 import { SearchMusicComponent } from './search-music/search-music.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MusicinfoComponent } from './musicinfo/musicinfo.component';
+import { MusicInfo } from './models/music_info';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -50,7 +52,8 @@ export function tokenGetter() {
     PlaylistComponent,
     AddmusicComponent,
     EditmusicComponent,
-    SearchMusicComponent
+    SearchMusicComponent,
+    MusicinfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -87,7 +90,8 @@ export function tokenGetter() {
           { path: 'playlist', component: PlaylistComponent },
           { path: 'addmusic', component: AddmusicComponent },
           { path: 'searchmusic', component: SearchMusicComponent },
-          { path: 'editmusic/:id', component: EditmusicComponent }
+          { path: 'editmusic/:id', component: EditmusicComponent },
+          { path: 'musicinfo/:id', component: MusicinfoComponent }
         ]
       }
       //{ path: '', component: HomeComponent, pathMatch: 'full' },

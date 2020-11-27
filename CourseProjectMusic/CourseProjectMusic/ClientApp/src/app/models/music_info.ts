@@ -7,4 +7,5 @@ export class MusicInfo {
   genreId: number;
   userId: number; 
   userLogin: string;
+  idOfUsersLike: number[];
 }

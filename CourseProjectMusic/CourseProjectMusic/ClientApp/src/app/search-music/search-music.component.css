@@ -23,18 +23,31 @@ button, button:focus {
   color: black;
   border: none
 }
-.test {
-  border: 1px solid transparent;
+.crd {
+  border: 1px solid rgb(127, 16, 179, 0.1);
   transition: all .3s;
 }
 
-.test:hover{
-    border: 1px solid purple;
+  .crd:hover {
+    border: 1px solid rgb(127, 16, 179);
+  }
+
+.cardText {
+  font-size: 75%;
+  border-top: 1px solid rgb(127, 16, 179, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  transition: all .3s;
 }
 
-  button:hover {
-    background-color: lightgrey
+  .cardText:hover {
+    border-top: 1px solid rgb(127, 16, 179);
   }
+
+button:hover {
+  background-color: lightgrey
+}
 
 .input-field input:focus + label {
   color: #9608fc !important;

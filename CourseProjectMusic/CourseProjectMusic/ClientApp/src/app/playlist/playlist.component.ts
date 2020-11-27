@@ -19,10 +19,12 @@ export class PlaylistComponent implements OnInit {
     private authService: AuthService, private audioService: AudioService) { }
 
   files: MusicInfo[] = [];
+  userName: string;
 
   facts = [];
 
   ngOnInit() {
+    this.userName = jwt_decode(this.authService.getAccessToken())['login'];
     this.musicService.getListMusicByUserId(jwt_decode(this.authService.getAccessToken())['sub']).subscribe(result => {
       this.files = result;
     }, error => {

@@ -32,23 +32,6 @@ namespace CourseProjectMusic.Controllers
             storageConfig = sc;
         }
 
-        //[HttpGet("Join")]
-        //public async Task<IActionResult> test()
-        //{
-        //    List<MusicInfo> list = await db.Musics.Join(db.Users, m => m.UserId, u => u.UserId, (m, u) =>new MusicInfo
-        //    {
-        //        Id=m.MusicId,
-        //        Name=m.MusicName,
-        //        Url = config.GetSection("ContainerURL").Value + m.MusicFileName,
-        //        FileName = m.MusicFileName,
-        //        Img = config.GetSection("ContainerURL").Value + m.MusicImageName,
-        //        GenreId = m.MusicGenreId,
-        //        UserId=u.UserId,
-        //        UserLogin=u.Login
-        //    }).ToListAsync();
-        //    return Ok(list);
-        //}
-
         [HttpGet("FilterMusic")]
         public async Task<List<MusicInfo>> GetFilteredList(string musicName, int genreId)
         {
@@ -117,6 +100,32 @@ namespace CourseProjectMusic.Controllers
             }
         }
 
+        [HttpPost("LikeMusic/{idMusic}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> LikeMusic(int idMusic)
+        {
+            try
+            {
+                db.UserMusicLikes.Add(new UserMusicLike { MusicId = idMusic, UserId = UserId });
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+            catch { return StatusCode(500); }
+        }
+
+        [HttpDelete("DeleteLikeMusic/{idMusic}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> DeleteLikeMusic(int idMusic)
+        {
+            try
+            {
+                db.UserMusicLikes.Remove(new UserMusicLike { MusicId = idMusic, UserId = UserId });
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+            catch { return StatusCode(500); }
+        }
+
         [HttpGet("{id}")]
         public async Task<MusicInfo> GetMusicInfoById(int id)
         {
@@ -128,7 +137,10 @@ namespace CourseProjectMusic.Controllers
                 Url = config.GetSection("ContainerURL").Value + music.MusicFileName,
                 FileName = music.MusicFileName,
                 Img = config.GetSection("ContainerURL").Value + music.MusicImageName,
-                GenreId = music.MusicGenreId
+                GenreId = music.MusicGenreId,
+                UserId=music.UserId,
+                UserLogin = await db.Users.Where(u => u.UserId == music.UserId).Select(u => u.Login).FirstOrDefaultAsync(),
+                IdOfUsersLike = await db.UserMusicLikes.Where(um => um.MusicId == id).Select(um => um.UserId).ToArrayAsync()
             };
         }
 

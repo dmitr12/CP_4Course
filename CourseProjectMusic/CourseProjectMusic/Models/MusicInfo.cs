@@ -15,5 +15,6 @@ namespace CourseProjectMusic.Models
         public int GenreId { get; set; }
         public int UserId { get; set; }
         public string UserLogin { get; set; }
+        public int[] IdOfUsersLike { get; set; }
     }
 }

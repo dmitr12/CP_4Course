@@ -16,7 +16,7 @@
         <div class="col-3 col-md-1" (click)="openFile(file.id, file.fileName, file.name)">
           <img src="{{file.img}}" class="round" />
         </div>
-        <div class="col-7 col-md-10 row align-items-center justify-content-start" (click)="openFile(file.id, file.fileName, file.name)">
+        <div class="col-7 col-md-10 row align-items-center justify-content-start" (click)="openFile(file.id, file.fileName, userName+'-'+file.name)">
           <div>
             {{file.name}}
           </div>

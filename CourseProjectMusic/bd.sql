@@ -48,3 +48,9 @@ DateOfPublication date not null,
 MusicGenreId int references MusicGenres(MusicGenreId) not null
 )
 go 
+create table UserMusicLikes(
+MusicId int references Musics(MusicId) not null,
+UserId int references Users(UserId) not null,
+primary key(MusicId, UserId)
+)
+go

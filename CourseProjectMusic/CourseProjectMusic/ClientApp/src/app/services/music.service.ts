@@ -14,8 +14,8 @@ export class MusicService {
   constructor(private http: HttpClient, @Inject(API_URL) private apiUrl: string) { }
 
   getFilteredMusicList(filter: FilteredMusicList): Observable<MusicInfo[]> {
-    let httpParams = new HttpParams().set('MusicName', filter.musicName).set('GenreId', filter.genreId.toString());
-    return this.http.get<MusicInfo[]>(`${this.apiUrl}api/music/FilterMusic/`, { params: httpParams });
+    let httpParams = new HttpParams().set('musicName', filter.musicName).set('genreId', filter.genreId.toString());
+    return this.http.get<MusicInfo[]>(`${this.apiUrl}api/music/FilterMusic`, { params: httpParams });
   }
 
   getListMusicGenres(): Observable<MusicGenreInfo[]> {
@@ -27,7 +27,7 @@ export class MusicService {
   }
 
   getMusicInfoById(id: number): Observable<MusicInfo>{
-    return this.http.get < MusicInfo>(`${this.apiUrl}api/music/` + id);
+    return this.http.get <MusicInfo>(`${this.apiUrl}api/music/` + id);
   }
 
   addmusic(formData: FormData) {
@@ -52,5 +52,13 @@ export class MusicService {
     if (format == regularFormat)
       return true;
     return false;
+  }
+
+  addLike(idMusic: number) {
+    return this.http.post(`${this.apiUrl}api/music/LikeMusic/` + idMusic, {});
+  }
+
+  deleteLike(idMusic: number) {
+    return this.http.delete(`${this.apiUrl}api/music/DeleteLikeMusic/` + idMusic, {});
   }
 }
