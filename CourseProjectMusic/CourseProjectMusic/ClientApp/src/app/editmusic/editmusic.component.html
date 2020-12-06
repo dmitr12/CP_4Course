@@ -17,13 +17,13 @@
       </mat-form-field>
       <div class="input-field">
         <div>
-          <span *ngIf="!form.value.musicFileName">Оставить старый файл</span>
+          <span *ngIf="!form.value.musicFileName">Оставить старый файл записи</span>
         </div>
         <input id="musicFileName" type="file" accept=".mp3" formControlName="musicFileName" (change)="changeMusicFile($event.target.files)">
       </div>
       <div class="input-field">
         <div>
-          <span *ngIf="!form.value.musicImageName">Оставить старый файл</span>
+          <span *ngIf="!form.value.musicImageName">Оставить старый файл картинки</span>
         </div>
         <input id="musicImageName" type="file" accept=".jpg, .png" formControlName="musicImageName" (change)="changeImageFile($event.target.files)">
       </div>

@@ -24,15 +24,13 @@
 
 
 <div class="row" style="padding:5px">
-  <div class="col-4 col-sm-3 col-md-2 col-lg-2 crd" *ngFor="let data of dataSearch | paginate: {id: 'listing_pagination',
+  <div class="col-10 offset-1 offset-sm-0 col-sm-6 col-md-3 col-lg-3 crd" *ngFor="let data of dataSearch | paginate: {id: 'listing_pagination',
   itemsPerPage: 12,
   currentPage: page,
   totalItems: totalRecords}" (click)="getInfoPage(data.id)">
-    <img style="height:150px;" class="card-img-top" src="{{data.img}}" alt="Alternate Text"/>
+    <img style="height:200px;" class="card-img-top" src="{{data.img}}" alt="Alternate Text" />
     <div class="card-body cardText d-flex flex-column">
       <p class="card-text">{{data.name}}</p>
-      <p class="card-text">{{data.userLogin}}</p>
-      <p class="card-text">{{getGenreName(data.genreId)}}</p>
     </div>
   </div>
 </div>

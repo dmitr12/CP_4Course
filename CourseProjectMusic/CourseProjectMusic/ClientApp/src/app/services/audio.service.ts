@@ -89,9 +89,14 @@ export class AudioService{
 
   mute() {
     this.audioObj.muted = true;
+    this.audioObj.volume = 0;
   }
 
   unmute() {
     this.audioObj.muted = false;
+  }
+
+  changeVolume() {
+    this.unmute();
   }
 }
