@@ -1,3 +1,7 @@
+<div class="loader" *ngIf="loaderService.isLoading | async">
+  <mat-progress-bar mode="query"></mat-progress-bar>
+</div>
+
 <div class="row">
   <div class="col-sm-3"></div>
   <form class="card col-12 col-sm-6" [formGroup]="form" (ngSubmit)="search()">

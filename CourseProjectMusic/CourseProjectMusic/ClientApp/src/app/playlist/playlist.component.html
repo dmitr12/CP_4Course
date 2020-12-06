@@ -7,11 +7,11 @@
       <button class="btn waves-effect waves-purple" (click)="btnAddMusicClick()">Добавить</button>
     </div>
   </div>
-  <div style="text-align:center" *ngIf="files.length==0">
-    У вас пока нет аудиозаписей
+  <div class="loader" *ngIf="loaderService.isLoading | async">
+    <mat-progress-bar mode="query"></mat-progress-bar>
   </div>
-  <div>
-    <cdk-virtual-scroll-viewport itemSize="100" class="example-viewport" style="height:500px; width:100%; border:none; margin-top:20px;">
+  <div style="height:540px">
+    <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport" style="height:100%;width:100%; border:none; margin-top:20px;">
       <div *cdkVirtualFor="let file of files" class="row collection_element" style="width:100%; min-width:300px">
         <div class="col-3 col-md-1" (click)="openFile(file.id, file.fileName, file.name)">
           <img src="{{file.img}}" class="round" />

@@ -7,6 +7,7 @@ import { MusicService } from '../services/music.service';
 import jwt_decode from 'jwt-decode';
 import { AuthService } from '../services/auth.service';
 import { AudioService } from '../services/audio.service';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-playlist',
@@ -16,7 +17,7 @@ import { AudioService } from '../services/audio.service';
 export class PlaylistComponent implements OnInit {
 
   constructor(private http: HttpClient, private musicService: MusicService, private router: Router,
-    private authService: AuthService, private audioService: AudioService) { }
+    private authService: AuthService, private audioService: AudioService, public loaderService: LoaderService) { }
 
   files: MusicInfo[] = [];
   userName: string;

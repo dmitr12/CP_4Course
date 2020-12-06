@@ -23,7 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthGuard } from './guards/auth-guard';
 import { ApplayoutComponent } from './layouts/applayout/applayout.component';
 import { PlaylistComponent } from './playlist/playlist.component';
-import { MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule, MatMenuModule } from '@angular/material';
+import {
+  MatSidenavModule, MatSelectModule, MatToolbarModule, MatButtonModule, MatListModule, MatMenuModule, MatProgressBarModule,
+  MatProgressSpinnerModule} from '@angular/material';
 import { AddmusicComponent } from './addmusic/addmusic.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -32,6 +34,7 @@ import { SearchMusicComponent } from './search-music/search-music.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MusicinfoComponent } from './musicinfo/musicinfo.component';
 import { MusicInfo } from './models/music_info';
+import { InterceptorService } from './services/interceptor.service';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -68,6 +71,8 @@ export function tokenGetter() {
     MatButtonModule,
     NgxPaginationModule,
     MatListModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
     ScrollingModule,
     JwtModule.forRoot({
@@ -104,6 +109,11 @@ export function tokenGetter() {
   providers: [{
     provide: API_URL,
     useValue: environment.api
+  },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
   }],
   bootstrap: [AppComponent]
 })

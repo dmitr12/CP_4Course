@@ -53,3 +53,9 @@ button:hover{
 .example-item {
   height: 50px;
 }
+
+.loader {
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}

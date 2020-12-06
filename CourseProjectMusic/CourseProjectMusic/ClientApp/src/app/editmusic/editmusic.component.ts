@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MusicInfo } from '../models/music_info';
 import { AudioService } from '../services/audio.service';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-editmusic',
@@ -25,7 +26,7 @@ export class EditmusicComponent implements OnInit {
   formData: FormData;
 
   constructor(private musicService: MusicService, private router: Router, private activateRoute: ActivatedRoute,
-    private audioService: AudioService) {
+    private audioService: AudioService, public loaderService: LoaderService) {
     this.subscription = activateRoute.params.subscribe(params => this.id = params['id']);
   }
 
@@ -93,7 +94,6 @@ export class EditmusicComponent implements OnInit {
         if (this.audioService.idMusic == this.id) {
           this.audioService.clearMusic();
         }
-        alert('Запись успешно изменена');
         this.router.navigate(['']);
       }
       else {

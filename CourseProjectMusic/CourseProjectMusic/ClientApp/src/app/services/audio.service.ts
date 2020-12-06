@@ -7,7 +7,8 @@ import { API_URL } from '../app-injection-tokens';
 })
 export class AudioService{
 
-  constructor(@Inject(API_URL) private apiUrl: string) { }
+  constructor(@Inject(API_URL) private apiUrl: string) {
+  }
 
   audioObj = new Audio();
 
@@ -28,6 +29,9 @@ export class AudioService{
     this.audioObj.preload = "auto"
     this.audioObj.load();
     this.play();
+    this.audioObj.onended=function() {
+      alert("end")
+    }
     this.updateProgress();
   }
 

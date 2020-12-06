@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '../app-injection-tokens';
 import { Router } from '@angular/router';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-addmusic',
@@ -20,7 +21,7 @@ export class AddmusicComponent implements OnInit {
   formData: FormData;
 
   constructor(private musicService: MusicService, private http: HttpClient, @Inject(API_URL) private apiUrl: string,
-    private router: Router) { }
+    private router: Router, public loaderService: LoaderService) { }
 
   ngOnInit() {
     this.formData = new FormData();
@@ -72,7 +73,6 @@ export class AddmusicComponent implements OnInit {
     this.formData.append("MusicName", this.form.value.musicName);
     this.musicService.addmusic(this.formData).subscribe((response: any) => {
         if (response['msg'] == '') {
-          alert('Запись успешно добавлена');
           this.router.navigate(['']);
         }
         else

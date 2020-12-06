@@ -1,3 +1,6 @@
+<div class="loader" *ngIf="loaderService.isLoading | async">
+  <mat-progress-bar mode="query"></mat-progress-bar>
+</div>
 <div class="row" style="min-width:300px">
   <div class="col-md-1"></div>
   <form class="card col-md-10" [formGroup]="form" (ngSubmit)="add()">
@@ -6,6 +9,10 @@
       <div class="input-field">
         <input id="musicName" required type="text" formControlName="musicName">
         <label for="musicName">*Название записи</label>
+        <span class="helper-text red-text" *ngIf="form.get('musicName').invalid && form.get('musicName').touched">
+          <span *ngIf="form.get('musicName').errors['required']">поле необходимо заполнить</span>
+          <span *ngIf="form.get('musicName').errors['maxlength'] && form.get('musicName').errors['maxlength']['requiredLength']">Максимум {{form.get('musicName').errors['maxlength']['requiredLength']}} символов</span>
+        </span>
       </div>
       <mat-form-field appearance="fill" style="width:100%">
         <label>*Жанр музыки</label>
